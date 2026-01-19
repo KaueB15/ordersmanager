@@ -1,6 +1,6 @@
 package br.com.sovis.ordersmanager;
 import totalcross.ui.MainWindow;
-import totalcross.ui.Label;
+import br.com.sovis.ordersmanager.view.LoginView;
 import totalcross.sys.Settings;
 public class ordersmanager extends MainWindow {
     
@@ -10,7 +10,7 @@ public class ordersmanager extends MainWindow {
 
     @Override
     public void initUI() {
-        Label helloWord = new Label("Hello World!");
-        add(helloWord, CENTER, CENTER);
+        LoginView loginView = new LoginView();
+        add(loginView, LEFT, TOP, PARENTSIZE, PARENTSIZE);
     }
 }
