@@ -32,6 +32,7 @@ public class Database {
             "createdAt TEXT)"
         );
 
+        
         st.execute(
             "CREATE TABLE IF NOT EXISTS product (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -39,9 +40,9 @@ public class Database {
             "description TEXT," +
             "price REAL NOT NULL)"
         );
-
+        
         st.execute(
-            "CREATE TABLE IF NOT EXISTS order (" +
+            "CREATE TABLE IF NOT EXISTS orders (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "id_customer INTEGER NOT NULL," +
             "total_price REAL," +
@@ -49,7 +50,7 @@ public class Database {
             "status TEXT," +
             "FOREIGN KEY (id_customer) REFERENCES customer(id))"
         );
-
+        
         st.execute(
             "CREATE TABLE IF NOT EXISTS product_order (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
@@ -58,7 +59,7 @@ public class Database {
             "price REAL," +
             "order_date TEXT," +
             "status TEXT," +
-            "FOREIGN KEY (id_order) REFERENCES order(id)," +
+            "FOREIGN KEY (id_order) REFERENCES orders(id)," +
             "FOREIGN KEY (id_product) REFERENCES product(id))"
         );
     }
