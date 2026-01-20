@@ -57,8 +57,7 @@
                 <configuration>
                     <name>${project.name}</name>
                     <platforms>
-                        <platform>-android</platform>
-<platform>-ios</platform>
+                        <platform>-win32</platform>
                     </platforms>
                     <activationKey>${totalcross.activation_key}</activationKey>
                     <!--                    For version 4.4.2 and 5.1.4 or later, Apple certificates are no longer required. -->
