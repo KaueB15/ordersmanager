@@ -16,11 +16,11 @@ public class ordersmanager extends MainWindow {
         try {
             Database.open();
             Database.createTables();
+            Database.insertAdminUser();
         } catch (Exception e) {
-
             e.printStackTrace();
         }
         LoginView loginView = new LoginView();
-        add(loginView, LEFT, TOP, PARENTSIZE, PARENTSIZE);
+        add(loginView, LEFT, TOP, FILL, FILL);
     }
 }

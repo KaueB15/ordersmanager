@@ -19,18 +19,18 @@ public class LoginView extends Container {
     @Override
     public void initUI() {
 
-        add(mainLabel, CENTER, TOP + 100);
+        add(mainLabel, CENTER, TOP + 30);
 
         userEmail.caption = "E-mail";
-        add(userEmail, CENTER, AFTER + 100);
+        add(userEmail, CENTER, AFTER + 20);
 
         userPassword.caption = "Senha";
         userPassword.setMode(Edit.PASSWORD);
-        add(userPassword, CENTER, AFTER + 40);
+        add(userPassword, CENTER, AFTER + 10);
 
         loginButton.setBackColor(Color.MAGENTA);
         loginButton.setForeColor(Color.WHITE);
-        add(loginButton, CENTER, AFTER + 80);
+        add(loginButton, CENTER, AFTER + 20);
 
         loginButton.addPressListener(event -> {
             if(userController.login(userEmail.getText(), userPassword.getText())) {

@@ -2,6 +2,7 @@ package br.com.sovis.ordersmanager.db;
 
 import totalcross.db.sqlite.SQLiteConnection;
 import totalcross.sql.Connection;
+import totalcross.sql.PreparedStatement;
 import totalcross.sql.Statement;
 
 public class Database {
@@ -62,6 +63,17 @@ public class Database {
             "FOREIGN KEY (id_order) REFERENCES orders(id)," +
             "FOREIGN KEY (id_product) REFERENCES product(id))"
         );
+    }
+
+    public static void insertAdminUser() throws Exception {
+        String sql =
+            "INSERT OR IGNORE INTO users (email, password) VALUES (?, ?)";
+
+        PreparedStatement ps = connection.prepareStatement(sql);
+        ps.setString(1, "admin");
+        ps.setString(2, "123");
+        ps.executeUpdate();
+        ps.close();
     }
 
     public static Connection getConnection() {
