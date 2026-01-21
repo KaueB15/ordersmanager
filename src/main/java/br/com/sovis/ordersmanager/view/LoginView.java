@@ -5,6 +5,7 @@ import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Edit;
 import totalcross.ui.Label;
+import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.gfx.Color;
 
@@ -35,6 +36,7 @@ public class LoginView extends Container {
         loginButton.addPressListener(event -> {
             if(userController.login(userEmail.getText(), userPassword.getText())) {
                 Toast.show("Login Realizado", 2000);
+                MainWindow.getMainWindow().swap(new HomeView());
             } else {
                 Toast.show("Falha no login", 2000);
             }
