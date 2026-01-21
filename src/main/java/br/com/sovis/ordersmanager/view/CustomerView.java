@@ -1,0 +1,51 @@
+package br.com.sovis.ordersmanager.view;
+
+import br.com.sovis.ordersmanager.controller.CustomerController;
+import totalcross.ui.Button;
+import totalcross.ui.Container;
+import totalcross.ui.Edit;
+import totalcross.ui.Label;
+import totalcross.ui.Toast;
+import totalcross.ui.gfx.Color;
+
+public class CustomerView extends Container {
+
+    private Label mainLabel = new Label("Cadastrar Cliente");
+    private Edit nameField = new Edit();
+    private Edit emailField = new Edit();
+    private Edit phoneField = new Edit();
+    private Button registerButton = new Button("Cadastrar Cliente");
+    private CustomerController customerController = new CustomerController();
+
+    public void initUI() {
+
+        add(mainLabel, CENTER, TOP + 10);
+
+        nameField.caption = "Nome";
+        add(nameField, CENTER, AFTER + 20);
+        
+        emailField.caption = "E-mail";
+        add(emailField, CENTER, AFTER + 20);
+
+        phoneField.caption = "Telefone";
+        add(phoneField, CENTER, AFTER + 20);
+
+        registerButton.setBackColor(Color.MAGENTA);
+        registerButton.setForeColor(Color.WHITE);
+        add(registerButton, CENTER, AFTER + 30);
+
+        registerButton.addPressListener(event -> {
+
+            try {
+                customerController.createCustomer(nameField.getText(), emailField.getText(), phoneField.getText());
+                Toast.show("Cliente cadastrado com sucesso!", 2000);
+            } catch (Exception e) {
+                Toast.show("Falha ao cadastrar cliente!", 2000);
+                e.printStackTrace();
+            }
+
+        });
+
+    }
+
+}
