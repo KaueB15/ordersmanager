@@ -17,6 +17,7 @@ public class CustomerView extends Container {
     private Button registerButton = new Button("Cadastrar Cliente");
     private CustomerController customerController = new CustomerController();
 
+    @Override
     public void initUI() {
 
         add(mainLabel, CENTER, TOP + 10);
@@ -39,6 +40,9 @@ public class CustomerView extends Container {
             try {
                 customerController.createCustomer(nameField.getText(), emailField.getText(), phoneField.getText());
                 Toast.show("Cliente cadastrado com sucesso!", 2000);
+                nameField.clear();
+                emailField.clear();
+                phoneField.clear();
             } catch (Exception e) {
                 Toast.show("Falha ao cadastrar cliente!", 2000);
                 e.printStackTrace();

@@ -34,6 +34,10 @@ public class HomeView extends Container {
             MainWindow.getMainWindow().swap(new CustomerView());
         });
 
+        productsButton.addPressListener(event -> {
+            MainWindow.getMainWindow().swap(new ProductView());
+        });
+
     }
 
 }
