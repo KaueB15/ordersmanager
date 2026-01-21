@@ -37,7 +37,7 @@ public class Database {
         st.execute(
             "CREATE TABLE IF NOT EXISTS product (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "nome TEXT NOT NULL," +
+            "name TEXT NOT NULL," +
             "description TEXT," +
             "price REAL NOT NULL)"
         );
