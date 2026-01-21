@@ -27,7 +27,7 @@ public class Database {
         st.execute(
             "CREATE TABLE IF NOT EXISTS customer (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
-            "nome TEXT NOT NULL," +
+            "name TEXT NOT NULL," +
             "email TEXT," +
             "phone TEXT," +
             "createdAt TEXT)"
