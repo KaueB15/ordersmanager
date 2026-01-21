@@ -24,4 +24,15 @@ public class CustomerController {
 
     }
 
+    public Customer[] findAll() throws Exception {
+
+        return customerDAO.findAll();
+
+    }
+    
+    public String[] getCustomersNames() throws Exception {
+
+        return customerDAO.getCustomersNames();
+    }
+    
 }

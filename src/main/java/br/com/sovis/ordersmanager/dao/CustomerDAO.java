@@ -4,6 +4,8 @@ import br.com.sovis.ordersmanager.db.Database;
 import br.com.sovis.ordersmanager.model.Customer;
 import totalcross.sql.Connection;
 import totalcross.sql.PreparedStatement;
+import totalcross.sql.ResultSet;
+import totalcross.util.Vector;
 
 public class CustomerDAO {
 
@@ -23,6 +25,43 @@ public class CustomerDAO {
 
         ps.executeUpdate();
         ps.close();        
+    }
+
+    public Customer[] findAll() throws Exception {
+
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM customer");
+        ResultSet rs = ps.executeQuery();
+        
+        Vector vector = new Vector();
+
+        while(rs.next()) {
+            Customer customer = new Customer();
+
+            customer.setId(rs.getInt("id"));
+            customer.setName(rs.getString("name"));
+            customer.setEmail(rs.getString("email"));
+            customer.setPhone(rs.getString("phone"));
+        }
+
+        Customer[] customers = new Customer[vector.size()];
+        vector.copyInto(customers);
+
+        return customers;
+
+    }
+
+    public String[] getCustomersNames() throws Exception {
+
+        Customer[] customers = findAll();
+        String[] customersNames = new String[customers.length];
+        customersNames[0] = "Selecione o Cliente";
+
+        for(int i = 0; i < customers.length; i++) {
+            customersNames[i+1] = customers[i].getName();
+        }
+
+        return customersNames;
+
     }
 
 }

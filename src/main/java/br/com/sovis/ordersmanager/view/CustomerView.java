@@ -5,6 +5,7 @@ import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Edit;
 import totalcross.ui.Label;
+import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.gfx.Color;
 
@@ -15,6 +16,7 @@ public class CustomerView extends Container {
     private Edit emailField = new Edit();
     private Edit phoneField = new Edit();
     private Button registerButton = new Button("Cadastrar Cliente");
+    private Button backButton = new Button("Voltar");
     private CustomerController customerController = new CustomerController();
 
     @Override
@@ -34,6 +36,10 @@ public class CustomerView extends Container {
         registerButton.setBackColor(Color.MAGENTA);
         registerButton.setForeColor(Color.WHITE);
         add(registerButton, CENTER, AFTER + 30);
+        
+        backButton.setBackColor(Color.RED);
+        backButton.setForeColor(Color.WHITE);
+        add(backButton, CENTER, AFTER + 10);
 
         registerButton.addPressListener(event -> {
 
@@ -48,6 +54,10 @@ public class CustomerView extends Container {
                 e.printStackTrace();
             }
 
+        });
+
+        backButton.addPressListener(event -> {
+            MainWindow.getMainWindow().swap(new HomeView());
         });
 
     }

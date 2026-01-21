@@ -5,6 +5,7 @@ import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Edit;
 import totalcross.ui.Label;
+import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.gfx.Color;
 
@@ -15,6 +16,7 @@ public class ProductView extends Container {
     private Edit descriptionField = new Edit();
     private Edit priceField = new Edit();
     private Button registerButton = new Button("Cadastrar Produto");
+    private Button backButton = new Button("Voltar");
     private ProductController productController = new ProductController();
 
     @Override
@@ -35,6 +37,10 @@ public class ProductView extends Container {
         registerButton.setForeColor(Color.WHITE);
         add(registerButton, CENTER, AFTER + 30);
 
+        backButton.setBackColor(Color.RED);
+        backButton.setForeColor(Color.WHITE);
+        add(backButton, CENTER, AFTER + 10);
+
         registerButton.addPressListener(event -> {
 
             try {
@@ -45,6 +51,10 @@ public class ProductView extends Container {
                 e.printStackTrace();
             }
 
+        });
+
+        backButton.addPressListener(event -> {
+            MainWindow.getMainWindow().swap(new HomeView());
         });
 
     }
