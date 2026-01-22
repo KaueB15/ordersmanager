@@ -1,5 +1,7 @@
 package br.com.sovis.ordersmanager.dao;
 
+import java.sql.SQLException;
+
 import br.com.sovis.ordersmanager.db.Database;
 import br.com.sovis.ordersmanager.model.User;
 import totalcross.sql.Connection;
@@ -11,7 +13,11 @@ public class UserDAO {
     private Connection connection;
 
     public UserDAO() {
-        this.connection = Database.getConnection();
+        try {
+            this.connection = Database.getConnection();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void insert(User user) throws Exception {

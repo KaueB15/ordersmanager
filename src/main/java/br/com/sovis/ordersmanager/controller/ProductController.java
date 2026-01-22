@@ -22,4 +22,8 @@ public class ProductController {
 
     }
 
+    public Product[] findAll() throws Exception {
+        return productDAO.findAll();
+    }
+
 }

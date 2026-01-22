@@ -1,21 +1,23 @@
 package br.com.sovis.ordersmanager.db;
 
-import totalcross.db.sqlite.SQLiteConnection;
+import java.sql.SQLException;
+
+import totalcross.db.sqlite.SQLiteUtil;
 import totalcross.sql.Connection;
 import totalcross.sql.PreparedStatement;
 import totalcross.sql.Statement;
+import totalcross.sys.Settings;
 
 public class Database {
-    private static Connection connection;
 
-    public static void open() throws Exception {
-        if(connection == null) {
-            connection = new SQLiteConnection("jdbc:sqlite:", "order.db");
-        }
+    private static SQLiteUtil connection;
+    
+    public static void open() throws SQLException {
+        connection = new SQLiteUtil(Settings.appPath, "order.db");
     }
 
     public static void createTables() throws Exception {
-        Statement st = connection.createStatement();
+        Statement st = connection.con().createStatement();
 
         st.execute(
             "CREATE TABLE IF NOT EXISTS users (" +
@@ -75,8 +77,8 @@ public class Database {
         ps.close();
     }
 
-    public static Connection getConnection() {
-        return connection;
+    public static Connection getConnection() throws SQLException {
+        return connection.con();
     }
 
 }
