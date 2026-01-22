@@ -58,8 +58,7 @@ public class Database {
             "id_order INTEGER NOT NULL," +
             "id_product INTEGER NOT NULL," +
             "price REAL," +
-            "order_date TEXT," +
-            "status TEXT," +
+            "quantity INTEGER," +
             "FOREIGN KEY (id_order) REFERENCES orders(id)," +
             "FOREIGN KEY (id_product) REFERENCES product(id))"
         );

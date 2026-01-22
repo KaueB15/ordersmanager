@@ -7,6 +7,8 @@ import totalcross.ui.Edit;
 import totalcross.ui.Label;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
+import totalcross.ui.event.ControlEvent;
+import totalcross.ui.event.PressListener;
 import totalcross.ui.gfx.Color;
 
 public class CustomerView extends Container {
@@ -41,23 +43,32 @@ public class CustomerView extends Container {
         backButton.setForeColor(Color.WHITE);
         add(backButton, CENTER, AFTER + 10);
 
-        registerButton.addPressListener(event -> {
+        registerButton.addPressListener(new PressListener() {
 
-            try {
-                customerController.createCustomer(nameField.getText(), emailField.getText(), phoneField.getText());
-                Toast.show("Cliente cadastrado com sucesso!", 2000);
-                nameField.clear();
-                emailField.clear();
-                phoneField.clear();
-            } catch (Exception e) {
-                Toast.show("Falha ao cadastrar cliente!", 2000);
-                e.printStackTrace();
+            public void controlPressed(ControlEvent e) {
+
+                try {
+                    customerController.createCustomer(nameField.getText(), emailField.getText(), phoneField.getText());
+                    Toast.show("Cliente cadastrado com sucesso!", 2000);
+                    nameField.clear();
+                    emailField.clear();
+                    phoneField.clear();
+                } catch (Exception ex) {
+                    Toast.show("Falha ao cadastrar cliente!", 2000);
+                }
+
             }
-
+            
         });
 
-        backButton.addPressListener(event -> {
-            MainWindow.getMainWindow().swap(new HomeView());
+        backButton.addPressListener(new PressListener() {
+            
+            public void controlPressed(ControlEvent e) {
+                
+                MainWindow.getMainWindow().swap(new HomeView());
+
+            }
+
         });
 
     }

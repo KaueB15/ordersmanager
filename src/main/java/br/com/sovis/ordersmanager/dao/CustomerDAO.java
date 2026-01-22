@@ -41,6 +41,7 @@ public class CustomerDAO {
             customer.setName(rs.getString("name"));
             customer.setEmail(rs.getString("email"));
             customer.setPhone(rs.getString("phone"));
+            vector.addElement(customer);
         }
 
         Customer[] customers = new Customer[vector.size()];
@@ -53,7 +54,7 @@ public class CustomerDAO {
     public String[] getCustomersNames() throws Exception {
 
         Customer[] customers = findAll();
-        String[] customersNames = new String[customers.length];
+        String[] customersNames = new String[customers.length + 1];
         customersNames[0] = "Selecione o Cliente";
 
         for(int i = 0; i < customers.length; i++) {

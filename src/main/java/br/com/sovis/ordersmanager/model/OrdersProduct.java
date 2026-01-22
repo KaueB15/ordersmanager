@@ -5,6 +5,7 @@ public class OrdersProduct {
     private int id;
     private int idOrder;
     private int idProduct;
+    private int quantity;
     private double value;
 
     public int getId() { 
@@ -37,6 +38,14 @@ public class OrdersProduct {
 
     public void setValue(double value) { 
         this.value = value; 
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+    
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
     }
 
 }
