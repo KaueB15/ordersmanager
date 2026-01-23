@@ -13,7 +13,7 @@ public class HomeView extends Container {
     private Button productsButton = new Button("Produtos");
     private Button ordersButton = new Button("Pedidos");
     private Button listOrdersButton = new Button("Lista de Pedidos");
-    private Button backButton = new Button("Sair");
+    private Button exiButton = new Button("Sair");
 
     @Override
     public void initUI() {
@@ -36,9 +36,11 @@ public class HomeView extends Container {
         listOrdersButton.setForeColor(Color.WHITE);
         add(listOrdersButton, CENTER, AFTER + 50);
 
-        backButton.setBackColor(Color.MAGENTA);
-        backButton.setForeColor(Color.WHITE);
-        add(backButton, CENTER, AFTER + 50);
+        exiButton.setBackColor(Color.RED);
+        exiButton.setForeColor(Color.WHITE);
+        add(exiButton, CENTER, AFTER + 50);
+
+        
         
         customerButton.addPressListener(event -> {
             MainWindow.getMainWindow().swap(new CustomerView());
@@ -56,7 +58,7 @@ public class HomeView extends Container {
             MainWindow.getMainWindow().swap(new ListOrderView());
         });
 
-        backButton.addPressListener(event -> {
+        exiButton.addPressListener(event -> {
             MainWindow.getMainWindow().swap(new LoginView());
         });
 

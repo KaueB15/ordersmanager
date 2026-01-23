@@ -28,11 +28,10 @@ public class OrderView extends Container {
     private ComboBox customersBox;
     private ComboBox productsBox;
     private Edit quantityField = new Edit();
-    private Button closeButton = new Button("Fechar Pedido");
-    private Button backButton = new Button("Voltar");
+    private Button closeButton = new Button("Salvar Pedido");
+    private Button cancelButton = new Button("Cancelar");
     private Button addProductButton = new Button("Adicionar Produto");
     
-
     private Product[] products;
     private OrdersProduct[] items = new OrdersProduct[50];
     private int itemCount = 0;
@@ -82,11 +81,11 @@ public class OrderView extends Container {
         closeButton.setForeColor(Color.WHITE);
         add(closeButton, CENTER, AFTER + 10);
         
-        backButton.setBackColor(Color.RED);
-        backButton.setForeColor(Color.WHITE);
-        add(backButton, CENTER, AFTER + 10);
+        cancelButton.setBackColor(Color.RED);
+        cancelButton.setForeColor(Color.WHITE);
+        add(cancelButton, CENTER, AFTER + 10);
         
-        backButton.addPressListener(new PressListener() {   
+        cancelButton.addPressListener(new PressListener() {   
             public void controlPressed(ControlEvent e) {
                 MainWindow.getMainWindow().swap(new HomeView());
             }
@@ -94,7 +93,7 @@ public class OrderView extends Container {
         
         closeButton.addPressListener(new PressListener() {
             public void controlPressed(ControlEvent e) {
-                closeOrder();
+                saveOrder();
             }
         });
         
@@ -136,7 +135,7 @@ public class OrderView extends Container {
         quantityField.setText("1");
     }
 
-    private void closeOrder() {
+    private void saveOrder() {
 
         if (customersBox.getSelectedIndex() == 0) {
             Toast.show("Selecione um Cliente", 2000);
@@ -153,7 +152,7 @@ public class OrderView extends Container {
         Orders order = new Orders();
         order.setCustomerId(customerId);
         order.setOrderDate(new Time().toString());
-        order.setStatus("CLOSED");
+        order.setStatus("ABERTO");
 
         OrdersProduct[] finalItems = new OrdersProduct[itemCount];
         for (int i = 0; i < itemCount; i++) {

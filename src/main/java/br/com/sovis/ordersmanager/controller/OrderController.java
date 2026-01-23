@@ -30,4 +30,12 @@ public class OrderController {
         return orderDAO.findAll();
     }
 
+    public void cancelOrder(int orderId) throws Exception {
+        orderDAO.cancelOrder(orderId);
+    }
+
+    public void closeOrder(int orderId) throws Exception {
+        orderDAO.closeOrder(orderId);
+    }
+
 }

@@ -50,9 +50,7 @@ public class OrderDAO {
 
     public void updateTotal(int orderId, double total) throws Exception {
 
-        Connection conn = Database.getConnection();
-
-        PreparedStatement ps = conn.prepareStatement(
+        PreparedStatement ps = connection.prepareStatement(
             "UPDATE orders SET total_price = ? WHERE id = ?"
         );
 
@@ -61,6 +59,31 @@ public class OrderDAO {
 
         ps.executeUpdate();
         ps.close();
+    }
+
+    public void closeOrder(int orderId) throws Exception {
+
+        PreparedStatement ps = connection.prepareStatement(
+            "UPDATE orders SET status = ? WHERE id = ?"
+        );
+
+        ps.setString(1, "FECHADO");
+        ps.setInt(2, orderId);
+
+        ps.executeUpdate();
+        ps.close();
+
+    }
+
+    public void cancelOrder(int orderId) throws Exception {
+
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM orders WHERE id = ?");
+
+        ps.setInt(1, orderId);
+
+        ps.executeUpdate();
+        ps.close();
+
     }
 
     public Orders[] findAll() throws Exception {

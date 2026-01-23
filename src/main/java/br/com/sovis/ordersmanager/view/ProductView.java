@@ -7,7 +7,6 @@ import totalcross.ui.Edit;
 import totalcross.ui.Label;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
-import totalcross.ui.dialog.MessageBox;
 import totalcross.ui.gfx.Color;
 
 public class ProductView extends Container {

@@ -16,8 +16,13 @@ public class ListOrderView extends Container {
 
     private Label mainLabel = new Label("Pedidos");
     private ListBox list;
+    private Container buttonRows = new Container();
     private Button backButton = new Button("Voltar");
+    private Button cancelOrderButton = new Button("Cancelar");
+    private Button closeOrderButton = new Button("Fechar Pedido");
     private OrderController orderController = new OrderController();
+
+    private Orders[] orders;
 
     @Override
     public void initUI() {
@@ -26,24 +31,45 @@ public class ListOrderView extends Container {
 
         list = new ListBox();
         loadOrders();
-        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 80);
+        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 150);
 
+        add(buttonRows, LEFT + 20, AFTER + 10, FILL - 40, FILL - 80);
+
+        closeOrderButton.setBackColor(Color.MAGENTA);
+        closeOrderButton.setForeColor(Color.WHITE);
+        buttonRows.add(closeOrderButton, LEFT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
+        cancelOrderButton.setBackColor(Color.MAGENTA);
+        cancelOrderButton.setForeColor(Color.WHITE);
+        buttonRows.add(cancelOrderButton, RIGHT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
 
         backButton.setBackColor(Color.RED);
         backButton.setForeColor(Color.WHITE);
-        add(backButton, CENTER, AFTER + 10);
+        add(backButton, CENTER, AFTER + 2);
 
         backButton.addPressListener(new PressListener() {
             public void controlPressed(ControlEvent e) {
                 MainWindow.getMainWindow().swap(new HomeView());
             }
         });
+
+        cancelOrderButton.addPressListener(new PressListener() {
+            public void controlPressed(ControlEvent e) {
+                cancelOrder();
+            }
+        });
+
+        closeOrderButton.addPressListener(new PressListener() {
+            public void controlPressed(ControlEvent e) {
+                closeOrder();
+            }
+        });
+
     }
 
     private void loadOrders() {
 
         try {
-            Orders[] orders = orderController.findAll();
+            orders = orderController.findAll();
             list.removeAll();
 
             for (int i = 0; i < orders.length; i++) {
@@ -54,12 +80,59 @@ public class ListOrderView extends Container {
                     " | " + o.getStatus() +
                     " | Total: " + o.getTotalValue()
                 );
+
+
             }
 
         } catch (Exception e) {
             Toast.show("Erro ao carregar Pedidos", 2000);
             System.err.println(e);
         }
+
+    }
+
+    private void cancelOrder() {
+
+        int orderSelected = list.getSelectedIndex();
+
+        if(orderSelected == -1) {
+            Toast.show("Selecione um pedido", 2000);
+        }
+
+        try {
+
+            int orderId = orders[orderSelected].getId();
+            orderController.cancelOrder(orderId);
+            loadOrders();
+
+        } catch (Exception e) {
+            
+            Toast.show("Falha ao cancelar pedido", 2000);
+            
+        }
+
+    }
+
+    private void closeOrder() {
+
+        int orderSelected = list.getSelectedIndex();
+
+        if(orderSelected == -1) {
+            Toast.show("Selecione um pedido", 2000);
+        }
+
+        try {
+
+            int orderId = orders[orderSelected].getId();
+            orderController.closeOrder(orderId);
+            loadOrders();
+
+        } catch (Exception e) {
+            
+            Toast.show("Falha ao cancelar pedido", 2000);
+            
+        }
+        
     }
 
 }   
