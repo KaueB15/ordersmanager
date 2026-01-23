@@ -30,7 +30,7 @@ public class OrderView extends Container {
     private Edit quantityField = new Edit();
     private Button closeButton = new Button("Fechar Pedido");
     private Button backButton = new Button("Voltar");
-    private Button addProductButton = new Button("Add Product");
+    private Button addProductButton = new Button("Adicionar Produto");
     
 
     private Product[] products;
@@ -69,14 +69,14 @@ public class OrderView extends Container {
         }
 
 
-        add(new Label("Quantity"), LEFT + 20, AFTER + 15);
+        add(new Label("Quantidade"), LEFT + 20, AFTER + 15);
         quantityField.setText("1");
         quantityField.setValidChars("0123456789");
         add(quantityField, LEFT + 20, AFTER + 5, FILL - 40, PREFERRED);
 
         add(addProductButton, CENTER, AFTER + 15);
         
-        add(totalLabel, LEFT + 20, AFTER + 20);
+        add(totalLabel, LEFT + 20, AFTER + 20, FILL - 40, PREFERRED);
         
         closeButton.setBackColor(Color.MAGENTA);
         closeButton.setForeColor(Color.WHITE);
@@ -153,7 +153,7 @@ public class OrderView extends Container {
         Orders order = new Orders();
         order.setCustomerId(customerId);
         order.setOrderDate(new Time().toString());
-        order.setStatus("OPEN");
+        order.setStatus("CLOSED");
 
         OrdersProduct[] finalItems = new OrdersProduct[itemCount];
         for (int i = 0; i < itemCount; i++) {

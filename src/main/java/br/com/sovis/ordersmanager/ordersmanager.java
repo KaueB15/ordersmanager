@@ -13,13 +13,13 @@ public class ordersmanager extends MainWindow {
     @Override
     public void initUI() {
         setRect(0, 0, 320, 480);
-        // try {
-        //     Database.open();
-        //     Database.createTables();
-        //     Database.insertAdminUser();
-        // } catch (Exception e) {
-        //     e.printStackTrace();
-        // }
+        try {
+            Database.open();
+            // Database.createTables();
+            // Database.insertAdminUser();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
         LoginView loginView = new LoginView();
         add(loginView, LEFT, TOP, FILL, FILL);
     }

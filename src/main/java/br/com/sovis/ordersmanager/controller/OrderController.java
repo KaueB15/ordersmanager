@@ -26,4 +26,8 @@ public class OrderController {
         orderDAO.updateTotal(orderId, total);
     }
 
+    public Orders[] findAll() throws Exception {
+        return orderDAO.findAll();
+    }
+
 }

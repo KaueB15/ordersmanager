@@ -27,17 +27,18 @@ public class CustomerView extends Container {
         add(mainLabel, CENTER, TOP + 10);
 
         nameField.caption = "Nome";
-        add(nameField, CENTER, AFTER + 20);
+        add(nameField, CENTER, AFTER + 40);
         
         emailField.caption = "E-mail";
-        add(emailField, CENTER, AFTER + 20);
+        add(emailField, CENTER, AFTER + 40);
 
         phoneField.caption = "Telefone";
-        add(phoneField, CENTER, AFTER + 20);
+        phoneField.setValidChars("0123456789");
+        add(phoneField, CENTER, AFTER + 40);
 
         registerButton.setBackColor(Color.MAGENTA);
         registerButton.setForeColor(Color.WHITE);
-        add(registerButton, CENTER, AFTER + 30);
+        add(registerButton, CENTER, AFTER + 60);
         
         backButton.setBackColor(Color.RED);
         backButton.setForeColor(Color.WHITE);
@@ -46,6 +47,10 @@ public class CustomerView extends Container {
         registerButton.addPressListener(new PressListener() {
 
             public void controlPressed(ControlEvent e) {
+
+                if (!validateCustomerFields(nameField)) {
+                    return;
+                }
 
                 try {
                     customerController.createCustomer(nameField.getText(), emailField.getText(), phoneField.getText());
@@ -71,6 +76,17 @@ public class CustomerView extends Container {
 
         });
 
+    }
+
+    private boolean validateCustomerFields(Edit nameEdit) {
+
+        if (nameEdit.getText().trim().length() == 0) {
+            Toast.show("Nome é obrigatório", 2000);
+            nameEdit.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 
 }

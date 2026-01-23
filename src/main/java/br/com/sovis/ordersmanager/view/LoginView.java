@@ -23,15 +23,15 @@ public class LoginView extends Container {
         add(mainLabel, CENTER, TOP + 30);
 
         userEmail.caption = "E-mail";
-        add(userEmail, CENTER, AFTER + 20);
+        add(userEmail, CENTER, AFTER + 100);
 
         userPassword.caption = "Senha";
         userPassword.setMode(Edit.PASSWORD);
-        add(userPassword, CENTER, AFTER + 10);
+        add(userPassword, CENTER, AFTER + 40);
 
         loginButton.setBackColor(Color.MAGENTA);
         loginButton.setForeColor(Color.WHITE);
-        add(loginButton, CENTER, AFTER + 20);
+        add(loginButton, CENTER, AFTER + 80);
 
         loginButton.addPressListener(event -> {
             if(userController.login(userEmail.getText(), userPassword.getText())) {

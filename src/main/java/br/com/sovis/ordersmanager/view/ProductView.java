@@ -7,6 +7,7 @@ import totalcross.ui.Edit;
 import totalcross.ui.Label;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
+import totalcross.ui.dialog.MessageBox;
 import totalcross.ui.gfx.Color;
 
 public class ProductView extends Container {
@@ -25,23 +26,29 @@ public class ProductView extends Container {
         add(mainLabel, CENTER, TOP + 10);
 
         nameField.caption = "Nome";
-        add(nameField, CENTER, AFTER + 20);
+        add(nameField, CENTER, AFTER + 40);
         
         descriptionField.caption = "Descrição";
-        add(descriptionField, CENTER, AFTER + 20);
+        add(descriptionField, CENTER, AFTER + 40);
 
         priceField.caption = "Preço";
-        add(priceField, CENTER, AFTER + 20);
+        priceField.setText("1");
+        priceField.setValidChars("0123456789");
+        add(priceField, CENTER, AFTER + 40);
 
         registerButton.setBackColor(Color.MAGENTA);
         registerButton.setForeColor(Color.WHITE);
-        add(registerButton, CENTER, AFTER + 30);
+        add(registerButton, CENTER, AFTER + 60);
 
         backButton.setBackColor(Color.RED);
         backButton.setForeColor(Color.WHITE);
         add(backButton, CENTER, AFTER + 10);
 
         registerButton.addPressListener(event -> {
+
+            if (!validateProductFields(nameField, priceField)) {
+                return;
+            }
 
             try {
                 productController.createProduct(nameField.getText(), descriptionField.getText(), Double.parseDouble(priceField.getText()));
@@ -57,6 +64,33 @@ public class ProductView extends Container {
             MainWindow.getMainWindow().swap(new HomeView());
         });
 
+    }
+
+    private boolean validateProductFields(Edit nameEdit, Edit priceEdit) {
+
+        if (nameEdit.getText().trim().length() == 0) {
+            Toast.show("Nome do produto é obrigatório", 2000);
+            nameEdit.requestFocus();
+            return false;
+        }
+
+        double price;
+
+        try {
+            price = Double.parseDouble(priceEdit.getText());
+        } catch (Exception e) {
+            Toast.show("Preo inválido", 2000);
+            priceEdit.requestFocus();
+            return false;
+        }
+
+        if (price <= 0) {
+            Toast.show("Preço tem que ser maior que 0", 2000);
+            priceEdit.requestFocus();
+            return false;
+        }
+
+        return true;
     }
 
 }

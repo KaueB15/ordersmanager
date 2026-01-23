@@ -8,6 +8,7 @@ import totalcross.sql.Connection;
 import totalcross.sql.PreparedStatement;
 import totalcross.sql.ResultSet;
 import totalcross.sql.Statement;
+import totalcross.util.Vector;
 
 public class OrderDAO {
 
@@ -60,6 +61,40 @@ public class OrderDAO {
 
         ps.executeUpdate();
         ps.close();
+    }
+
+    public Orders[] findAll() throws Exception {
+
+        String sql =
+            "SELECT o.id, o.order_date, o.total_price, o.status, c.name AS customer_name " +
+            "FROM orders o " +
+            "JOIN customer c ON c.id = o.id_customer " +
+            "ORDER BY o.id DESC";
+
+        Statement st = connection.createStatement();
+        ResultSet rs = st.executeQuery(sql);
+
+        Vector list = new Vector();
+
+        while (rs.next()) {
+
+            Orders order = new Orders();
+            order.setId(rs.getInt("id"));
+            order.setOrderDate(rs.getString("order_date"));
+            order.setTotalValue(rs.getDouble("total_price"));
+            order.setStatus(rs.getString("status"));
+            order.setStatus(order.getStatus() + " - " + rs.getString("customer_name"));
+
+            list.addElement(order);
+        }
+
+        rs.close();
+        st.close();
+
+        Orders[] orders = new Orders[list.size()];
+        list.copyInto(orders);
+
+        return orders;
     }
 
 }
