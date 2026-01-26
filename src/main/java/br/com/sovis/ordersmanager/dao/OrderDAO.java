@@ -107,7 +107,6 @@ public class OrderDAO {
             order.setTotalValue(rs.getDouble("total_price"));
             order.setStatus(rs.getString("status"));
             order.setStatus(order.getStatus() + " - " + rs.getString("customer_name"));
-
             list.addElement(order);
         }
 

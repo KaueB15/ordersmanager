@@ -79,7 +79,7 @@ public class ListOrderView extends Container {
                     Toast.show("Selecione um pedido", 2000);
                 }
                 
-                MainWindow.getMainWindow().swap(new OrderInfoView(orders[orderSelected].getId()));
+                MainWindow.getMainWindow().swap(new OrderInfoView(orders[orderSelected].getId(), orders[orderSelected].getStatus().split(" ")[0]));
             }
         });
 
@@ -116,6 +116,11 @@ public class ListOrderView extends Container {
 
         if(orderSelected == -1) {
             Toast.show("Selecione um pedido", 2000);
+        }
+
+        if(orders[orderSelected].getStatus().split(" ")[0].equals("FECHADO")) {
+            Toast.show("Pedido já fechado!", 2000);
+            return;
         }
 
         try {

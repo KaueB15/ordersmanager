@@ -15,6 +15,8 @@ import totalcross.ui.gfx.Color;
 public class OrderInfoView extends Container {
 
     private int orderId;
+    private String status;
+
     private Label mainLabel = new Label("Produtos do Pedido");
     private ListBox list;
     private Container buttonRows = new Container();
@@ -24,8 +26,9 @@ public class OrderInfoView extends Container {
 
     private ProductItem[] productItems; 
 
-    public OrderInfoView(int orderId) {
+    public OrderInfoView(int orderId, String status) {
         this.orderId = orderId;
+        this.status = status;
     }
     
     public void initUI() {
@@ -90,6 +93,11 @@ public class OrderInfoView extends Container {
 
         if(productSelected == -1) {
             Toast.show("Selecione um produto", 2000);
+        }
+
+        if(status.equals("FECHADO")) {
+            Toast.show("Pedido já fechado!", 2000);
+            return;
         }
 
         try {
