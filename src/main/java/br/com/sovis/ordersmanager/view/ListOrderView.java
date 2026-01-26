@@ -17,9 +17,11 @@ public class ListOrderView extends Container {
     private Label mainLabel = new Label("Pedidos");
     private ListBox list;
     private Container buttonRows = new Container();
+    private Container buttonRowsInfos = new Container();
     private Button backButton = new Button("Voltar");
     private Button cancelOrderButton = new Button("Cancelar");
     private Button closeOrderButton = new Button("Fechar Pedido");
+    private Button getInfoButton = new Button("Produtos");
     private OrderController orderController = new OrderController();
 
     private Orders[] orders;
@@ -33,7 +35,7 @@ public class ListOrderView extends Container {
         loadOrders();
         add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 150);
 
-        add(buttonRows, LEFT + 20, AFTER + 10, FILL - 40, FILL - 80);
+        add(buttonRows, LEFT + 20, AFTER + 10, FILL - 40, 45);
 
         closeOrderButton.setBackColor(Color.MAGENTA);
         closeOrderButton.setForeColor(Color.WHITE);
@@ -42,9 +44,14 @@ public class ListOrderView extends Container {
         cancelOrderButton.setForeColor(Color.WHITE);
         buttonRows.add(cancelOrderButton, RIGHT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
 
+        add(buttonRowsInfos, LEFT + 20, AFTER + 10, FILL - 40, 45);
+
+        getInfoButton.setBackColor(Color.MAGENTA);
+        getInfoButton.setForeColor(Color.WHITE);
+        buttonRowsInfos.add(getInfoButton, LEFT, TOP, (buttonRowsInfos.getWidth() / 2) -5, PREFERRED);
         backButton.setBackColor(Color.RED);
         backButton.setForeColor(Color.WHITE);
-        add(backButton, CENTER, AFTER + 2);
+        buttonRowsInfos.add(backButton, RIGHT, TOP, (buttonRowsInfos.getWidth() / 2) -5, PREFERRED);
 
         backButton.addPressListener(new PressListener() {
             public void controlPressed(ControlEvent e) {
@@ -61,6 +68,18 @@ public class ListOrderView extends Container {
         closeOrderButton.addPressListener(new PressListener() {
             public void controlPressed(ControlEvent e) {
                 closeOrder();
+            }
+        });
+
+        getInfoButton.addPressListener(new PressListener() {
+            public void controlPressed(ControlEvent e) {
+                int orderSelected = list.getSelectedIndex();
+
+                if(orderSelected == -1) {
+                    Toast.show("Selecione um pedido", 2000);
+                }
+                
+                MainWindow.getMainWindow().swap(new OrderInfoView(orders[orderSelected].getId()));
             }
         });
 
