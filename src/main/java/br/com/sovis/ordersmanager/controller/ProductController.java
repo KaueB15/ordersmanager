@@ -26,4 +26,8 @@ public class ProductController {
         return productDAO.findAll();
     }
 
+    public void removeProduct(int productId) throws Exception {
+        productDAO.removeProduct(productId);
+    }
+
 }

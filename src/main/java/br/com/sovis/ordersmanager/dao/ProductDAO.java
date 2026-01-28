@@ -61,4 +61,15 @@ public class ProductDAO {
         return products;
     }
 
+    public void removeProduct(int productId) throws Exception {
+
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM product WHERE id = ?");
+
+        ps.setInt(1, productId);
+
+        ps.executeUpdate();
+        ps.close();
+
+    }
+
 }

@@ -30,8 +30,8 @@ public class OrderProductDAO {
 
         ps.setInt(1, item.getidOrder());
         ps.setInt(2, item.getidProduct());
-        ps.setInt(3, item.getQuantity());
-        ps.setDouble(4, item.getValue());
+        ps.setDouble(3, item.getValue());
+        ps.setInt(4, item.getQuantity());
 
         ps.executeUpdate();
         ps.close();

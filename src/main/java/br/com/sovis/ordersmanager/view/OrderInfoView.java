@@ -74,8 +74,8 @@ public class OrderInfoView extends Container {
 
                 list.add(
                     pi.getProductName() +
-                    " | " + pi.getPrice() +
-                    " | Total: " + pi.getQuantity()
+                    " | " + pi.getQuantity() +
+                    " | Total: " + pi.getPrice()
                 );
 
             }
