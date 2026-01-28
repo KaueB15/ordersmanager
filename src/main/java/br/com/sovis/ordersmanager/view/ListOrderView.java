@@ -2,10 +2,11 @@ package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.OrderController;
 import br.com.sovis.ordersmanager.model.Orders;
+import br.com.sovis.ordersmanager.view.items.OrderItem;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Label;
-import totalcross.ui.ListBox;
+import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.event.ControlEvent;
@@ -15,7 +16,8 @@ import totalcross.ui.gfx.Color;
 public class ListOrderView extends Container {
 
     private Label mainLabel = new Label("Pedidos");
-    private ListBox list;
+    private ListContainer list;
+    private int selectedIndex = -1;
     private Container buttonRows = new Container();
     private Container buttonRowsInfos = new Container();
     private Button backButton = new Button("Voltar");
@@ -31,9 +33,10 @@ public class ListOrderView extends Container {
 
         add(mainLabel, CENTER, TOP + 20);
 
-        list = new ListBox();
-        loadOrders();
+        list = new ListContainer();
+        
         add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 150);
+        loadOrders();
 
         add(buttonRows, LEFT + 20, AFTER + 10, FILL - 40, 45);
 
@@ -90,16 +93,16 @@ public class ListOrderView extends Container {
         try {
             orders = orderController.findAll();
             list.removeAll();
+            selectedIndex = -1;
 
             for (int i = 0; i < orders.length; i++) {
-                Orders o = orders[i];
+                OrderItem item = new OrderItem(orders[i]);
 
-                list.add(
-                    "Pedido #" + o.getId() +
-                    " | " + o.getStatus() +
-                    " | Total: " + o.getTotalValue()
-                );
-
+                if (i == 0) {
+                    list.addContainer(item);
+                } else {
+                    list.addContainer(item);
+                }
 
             }
 
