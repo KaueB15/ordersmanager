@@ -34,5 +34,11 @@ public class CustomerController {
 
         return customerDAO.getCustomersNames();
     }
+
+    public void removerCustomer(int customerId) throws Exception {
+
+        customerDAO.removeCustomer(customerId);
+
+    }
     
 }

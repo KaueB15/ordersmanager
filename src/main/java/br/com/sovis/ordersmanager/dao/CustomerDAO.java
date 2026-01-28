@@ -71,4 +71,15 @@ public class CustomerDAO {
 
     }
 
+    public void removeCustomer(int customerId) throws Exception {
+
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM customer WHERE id = ?");
+
+        ps.setInt(1, customerId);
+
+        ps.executeUpdate();
+        ps.close();
+
+    }
+
 }

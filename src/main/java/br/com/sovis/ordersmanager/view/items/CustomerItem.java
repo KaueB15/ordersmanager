@@ -1,15 +1,16 @@
 package br.com.sovis.ordersmanager.view.items;
 
-import br.com.sovis.ordersmanager.model.Orders;
+import br.com.sovis.ordersmanager.model.Customer;
 import totalcross.ui.Container;
 import totalcross.ui.Label;
 import totalcross.ui.gfx.Color;
 
-public class OrderItem extends Container {
-    private Orders order;
+public class CustomerItem extends Container {
 
-    public OrderItem(Orders order) {
-        this.order = order;
+    private Customer customer;
+
+    public CustomerItem(Customer customer) {
+        this.customer = customer;
     }
 
     @Override
@@ -18,9 +19,8 @@ public class OrderItem extends Container {
         setBackColor(Color.WHITE);
 
         Label label = new Label(
-            "Pedido #" + order.getId() +
-            " | " + order.getStatus() +
-            " | Total: " + order.getTotalValue()
+            + customer.getId() +
+            " | " + customer.getName()
         );
 
         label.setForeColor(Color.BLACK);
@@ -28,7 +28,8 @@ public class OrderItem extends Container {
         add(label, LEFT + 10, CENTER);
     }
 
-    public Orders getOrder() {
-        return order;
+    public Customer getcustomer() {
+        return customer;
     }
+
 }

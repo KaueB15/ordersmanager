@@ -17,7 +17,6 @@ public class ListOrderView extends Container {
 
     private Label mainLabel = new Label("Pedidos");
     private ListContainer list;
-    private int selectedIndex = -1;
     private Container buttonRows = new Container();
     private Container buttonRowsInfos = new Container();
     private Button backButton = new Button("Voltar");
@@ -93,7 +92,6 @@ public class ListOrderView extends Container {
         try {
             orders = orderController.findAll();
             list.removeAll();
-            selectedIndex = -1;
 
             for (int i = 0; i < orders.length; i++) {
                 OrderItem item = new OrderItem(orders[i]);

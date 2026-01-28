@@ -43,7 +43,7 @@ public class HomeView extends Container {
         
         
         customerButton.addPressListener(event -> {
-            MainWindow.getMainWindow().swap(new CustomerView());
+            MainWindow.getMainWindow().swap(new ListCustomersView());
         });
 
         productsButton.addPressListener(event -> {
