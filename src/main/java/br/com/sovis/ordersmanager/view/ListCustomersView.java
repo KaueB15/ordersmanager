@@ -3,104 +3,101 @@ package br.com.sovis.ordersmanager.view;
 import br.com.sovis.ordersmanager.controller.CustomerController;
 import br.com.sovis.ordersmanager.model.Customer;
 import br.com.sovis.ordersmanager.view.items.CustomerItem;
-import totalcross.ui.Button;
-import totalcross.ui.Container;
-import totalcross.ui.Label;
-import totalcross.ui.ListContainer;
-import totalcross.ui.MainWindow;
-import totalcross.ui.Toast;
-import totalcross.ui.event.ControlEvent;
-import totalcross.ui.event.PressListener;
+import totalcross.ui.*;
 import totalcross.ui.gfx.Color;
 
 public class ListCustomersView extends Container {
 
     private Label mainLabel = new Label("Clientes");
-    private ListContainer list;
+
     private Container buttonRows = new Container();
+
+    private ListContainer list;
+
     private Button backButton = new Button("Voltar");
     private Button removeCustomerButton = new Button("Remover");
-    private CustomerController customerController = new CustomerController();
+    private Button addCustomerButton = new Button("+");
 
+    private CustomerController customerController = new CustomerController();
     private Customer[] customers;
 
     @Override
     public void initUI() {
 
+        setBackColor(Color.getRGB(242, 247, 244));
+
+        mainLabel.setForeColor(Color.getRGB(46, 204, 113));
+        mainLabel.setFont(mainLabel.getFont().adjustedBy(6));
         add(mainLabel, CENTER, TOP + 20);
 
         list = new ListContainer();
-        
-        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 150);
+        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 130);
         loadCustomers();
 
-        add(buttonRows, LEFT + 20, AFTER + 10, FILL - 40, 45);
+        buttonRows.setBackColor(Color.WHITE);
+        add(buttonRows, LEFT, BOTTOM, FILL, 60);
 
-        removeCustomerButton.setBackColor(Color.MAGENTA);
+        removeCustomerButton.setBackColor(Color.getRGB(156, 39, 176));
         removeCustomerButton.setForeColor(Color.WHITE);
-        buttonRows.add(removeCustomerButton, LEFT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
-        backButton.setBackColor(Color.RED);
+        buttonRows.add(
+            removeCustomerButton,
+            LEFT + 10,
+            CENTER,
+            (buttonRows.getWidth() / 2) - 15,
+            45
+        );
+
+        backButton.setBackColor(Color.getRGB(244, 67, 54));
         backButton.setForeColor(Color.WHITE);
-        buttonRows.add(backButton, RIGHT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
+        buttonRows.add(backButton, AFTER + 10, SAME, (buttonRows.getWidth() / 2) - 15, 45);
 
-        backButton.addPressListener(new PressListener() {
-            public void controlPressed(ControlEvent e) {
-                MainWindow.getMainWindow().swap(new HomeView());
-            }
-        });
+        addCustomerButton.setBackColor(Color.getRGB(46, 204, 113));
+        addCustomerButton.setForeColor(Color.WHITE);
+        addCustomerButton.setFont(addCustomerButton.getFont().adjustedBy(10));
 
-        removeCustomerButton.addPressListener(new PressListener() {
-            public void controlPressed(ControlEvent e) {
-                removeCustomer();
-            }
-        });
+        add(addCustomerButton, RIGHT - 20, BOTTOM - 60, 60, 60);
 
+        backButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new HomeView())
+        );
+
+        removeCustomerButton.addPressListener(e ->
+            removeCustomer()
+        );
+
+        addCustomerButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new CustomerView())
+        );
     }
 
-    private void loadCustomers() {
 
+    private void loadCustomers() {
         try {
             customers = customerController.findAll();
             list.removeAll();
-
-            for (int i = 0; i < customers.length; i++) {
-                CustomerItem item = new CustomerItem(customers[i]);
-
-                if (i == 0) {
-                    list.addContainer(item);
-                } else {
-                    list.addContainer(item);
-                }
-
+            for (Customer c : customers) {
+                list.addContainer(new CustomerItem(c));
             }
-
         } catch (Exception e) {
             Toast.show("Erro ao carregar clientes", 2000);
-            System.err.println(e);
         }
-
     }
 
     private void removeCustomer() {
 
-        int customerSelected = list.getSelectedIndex();
+        int index = list.getSelectedIndex();
 
-        if(customerSelected == -1) {
+        if (index == -1) {
             Toast.show("Selecione um cliente", 2000);
+            return;
         }
 
         try {
-
-            int customerId = customers[customerSelected].getId();
-            customerController.removerCustomer(customerId);
+            customerController.removerCustomer(customers[index].getId());
             loadCustomers();
-
+            Toast.show("Cliente removido", 2000);
         } catch (Exception e) {
-            
             Toast.show("Falha ao remover cliente", 2000);
-            
         }
-
     }
-
 }

@@ -162,7 +162,7 @@ public class OrderView extends Container {
         try {
             orderController.createOrder(order, finalItems);
             Toast.show("Pedido Salvo", 2000);
-            MainWindow.getMainWindow().swap(new HomeView());
+            MainWindow.getMainWindow().swap(new ListOrderView());
         } catch (Exception e) {
             Toast.show("Erro ao salvar pedido", 2000);
             e.printStackTrace();

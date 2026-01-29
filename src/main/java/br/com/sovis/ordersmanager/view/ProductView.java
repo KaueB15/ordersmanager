@@ -60,7 +60,7 @@ public class ProductView extends Container {
         });
 
         backButton.addPressListener(event -> {
-            MainWindow.getMainWindow().swap(new HomeView());
+            MainWindow.getMainWindow().swap(new ListProductsView());
         });
 
     }

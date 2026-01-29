@@ -18,7 +18,6 @@ public class HomeView extends Container {
     private Button customerButton = new Button("Clientes");
     private Button productsButton = new Button("Produtos");
     private Button ordersButton = new Button("Pedidos");
-    private Button listOrdersButton = new Button("Lista de Pedidos");
     private Button exitButton = new Button("Sair");
 
     private Container sideMenu = new Container();
@@ -47,13 +46,11 @@ public class HomeView extends Container {
         addMenuButton(customerButton);
         addMenuButton(productsButton);
         addMenuButton(ordersButton);
-        addMenuButton(listOrdersButton);
         addMenuButton(exitButton);
 
         customerButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListCustomersView()));
         productsButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListProductsView()));
-        ordersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new OrderView()));
-        listOrdersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListOrderView()));
+        ordersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListOrderView()));
         exitButton.addPressListener(event -> MainWindow.getMainWindow().swap(new LoginView()));
 
         addPenListener(new PenListener() {

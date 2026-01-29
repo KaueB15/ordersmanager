@@ -70,7 +70,7 @@ public class CustomerView extends Container {
             
             public void controlPressed(ControlEvent e) {
                 
-                MainWindow.getMainWindow().swap(new HomeView());
+                MainWindow.getMainWindow().swap(new ListCustomersView());
 
             }
 

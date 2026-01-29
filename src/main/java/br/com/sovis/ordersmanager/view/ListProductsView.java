@@ -9,8 +9,6 @@ import totalcross.ui.Label;
 import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
-import totalcross.ui.event.ControlEvent;
-import totalcross.ui.event.PressListener;
 import totalcross.ui.gfx.Color;
 
 public class ListProductsView extends Container {
@@ -18,90 +16,97 @@ public class ListProductsView extends Container {
     private Label mainLabel = new Label("Produtos");
     private ListContainer list;
     private Container buttonRows = new Container();
-    private Button backButton = new Button("Voltar");
-    private Button removeCustomerButton = new Button("Remover");
-    private ProductController productController = new ProductController();
 
+    private Button backButton = new Button("Voltar");
+    private Button removeProductButton = new Button("Remover");
+
+    private ProductController productController = new ProductController();
     private Product[] products;
 
     @Override
     public void initUI() {
 
+        setBackColor(Color.getRGB(242, 247, 244));
+
+        mainLabel.setForeColor(Color.getRGB(46, 204, 113));
+        mainLabel.setFont(mainLabel.getFont().adjustedBy(6));
         add(mainLabel, CENTER, TOP + 20);
 
         list = new ListContainer();
-        
-        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 150);
+        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 130);
         loadProducts();
 
-        add(buttonRows, LEFT + 20, AFTER + 10, FILL - 40, 45);
+        buttonRows.setBackColor(Color.WHITE);
+        add(buttonRows, LEFT, BOTTOM, FILL, 60);
 
-        removeCustomerButton.setBackColor(Color.MAGENTA);
-        removeCustomerButton.setForeColor(Color.WHITE);
-        buttonRows.add(removeCustomerButton, LEFT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
-        backButton.setBackColor(Color.RED);
+        removeProductButton.setBackColor(Color.getRGB(156, 39, 176));
+        removeProductButton.setForeColor(Color.WHITE);
+        buttonRows.add(
+            removeProductButton,
+            LEFT + 10,
+            CENTER,
+            (buttonRows.getWidth() / 2) - 15,
+            45
+        );
+
+        backButton.setBackColor(Color.getRGB(244, 67, 54));
         backButton.setForeColor(Color.WHITE);
-        buttonRows.add(backButton, RIGHT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
+        buttonRows.add(
+            backButton,
+            AFTER + 10,
+            SAME,
+            (buttonRows.getWidth() / 2) - 15,
+            45
+        );
 
-        backButton.addPressListener(new PressListener() {
-            public void controlPressed(ControlEvent e) {
-                MainWindow.getMainWindow().swap(new HomeView());
-            }
-        });
+        Button addButton = new Button("+");
+        addButton.setBackColor(Color.getRGB(46, 204, 113));
+        addButton.setForeColor(Color.WHITE);
+        addButton.setFont(addButton.getFont().adjustedBy(10));
+        add(addButton, RIGHT - 20, BOTTOM - 60, 60, 60);
 
-        removeCustomerButton.addPressListener(new PressListener() {
-            public void controlPressed(ControlEvent e) {
-                removeCustomer();
-            }
-        });
+        backButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new HomeView())
+        );
 
+        removeProductButton.addPressListener(e ->
+            removeProduct()
+        );
+
+        addButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new ProductView())
+        );
     }
 
     private void loadProducts() {
-
         try {
             products = productController.findAll();
             list.removeAll();
 
             for (int i = 0; i < products.length; i++) {
-                ProductItem item = new ProductItem(products[i]);
-
-                if (i == 0) {
-                    list.addContainer(item);
-                } else {
-                    list.addContainer(item);
-                }
-
+                list.addContainer(new ProductItem(products[i]));
             }
 
         } catch (Exception e) {
-            Toast.show("Erro ao carregar clientes", 2000);
-            System.err.println(e);
+            Toast.show("Erro ao carregar produtos", 2000);
         }
-
     }
 
-    private void removeCustomer() {
+    private void removeProduct() {
 
-        int productselected = list.getSelectedIndex();
-        ProductItem productItem = (ProductItem) list.getSelectedItem();
+        int selectedIndex = list.getSelectedIndex();
 
-        if(productselected == -1) {
-            Toast.show("Selecione um cliente", 2000);
+        if (selectedIndex == -1) {
+            Toast.show("Selecione um produto", 2000);
+            return;
         }
 
         try {
-
-            int productId = products[productselected].getId();
+            int productId = products[selectedIndex].getId();
             productController.removeProduct(productId);
-            productItem.removeAll();
-
+            loadProducts();
         } catch (Exception e) {
-            
-            Toast.show("Falha ao remover cliente", 2000);
-            
+            Toast.show("Falha ao remover produto", 2000);
         }
-
     }
-
 }
