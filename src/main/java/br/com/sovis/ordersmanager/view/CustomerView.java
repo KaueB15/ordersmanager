@@ -52,41 +52,7 @@ public class CustomerView extends Container {
 
         backButton.setBackColor(Color.getRGB(244, 67, 54));
         backButton.setForeColor(Color.WHITE);
-<<<<<<< HEAD
-        add(backButton, CENTER, AFTER + 10);
-
-        registerButton.addPressListener(new PressListener() {
-
-            public void controlPressed(ControlEvent e) {
-
-                if (!validateCustomerFields(nameField)) {
-                    return;
-                }
-
-                try {
-                    customerController.createCustomer(nameField.getText(), emailField.getText(), phoneField.getText());
-                    Toast.show("Cliente cadastrado com sucesso!", 2000);
-                    MainWindow.getMainWindow().swap(new ListCustomersView());
-                } catch (Exception ex) {
-                    Toast.show("Falha ao cadastrar cliente!", 2000);
-                }
-
-            }
-            
-        });
-
-        backButton.addPressListener(new PressListener() {
-            
-            public void controlPressed(ControlEvent e) {
-                
-                MainWindow.getMainWindow().swap(new ListCustomersView());
-
-            }
-
-        });
-=======
         footer.add(backButton, AFTER + 10, SAME, (footer.getWidth() / 2) - 15, 45);
->>>>>>> 56b8fddfedc6fdf0bff26a226ede2bda8d581221
 
         registerButton.addPressListener(e -> saveCustomer());
         backButton.addPressListener(e ->
@@ -131,9 +97,7 @@ public class CustomerView extends Container {
             );
 
             Toast.show("Cliente cadastrado com sucesso", 2000);
-            nameField.clear();
-            emailField.clear();
-            phoneField.clear();
+            MainWindow.getMainWindow().swap(new ListCustomersView());
 
         } catch (Exception e) {
             Toast.show("Erro ao cadastrar cliente", 2000);
