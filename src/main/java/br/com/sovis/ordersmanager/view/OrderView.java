@@ -87,7 +87,7 @@ public class OrderView extends Container {
         
         cancelButton.addPressListener(new PressListener() {   
             public void controlPressed(ControlEvent e) {
-                MainWindow.getMainWindow().swap(new HomeView());
+                MainWindow.getMainWindow().swap(new ListOrderView());
             }
         });
         

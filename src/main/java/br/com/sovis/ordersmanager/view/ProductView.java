@@ -52,6 +52,7 @@ public class ProductView extends Container {
             try {
                 productController.createProduct(nameField.getText(), descriptionField.getText(), Double.parseDouble(priceField.getText()));
                 Toast.show("Produto cadastrado com sucesso!", 2000);
+                MainWindow.getMainWindow().swap(new ListProductsView());
             } catch (Exception e) {
                 Toast.show("Falha ao cadastrar produto!", 2000);
                 e.printStackTrace();

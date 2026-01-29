@@ -37,7 +37,7 @@ public class ListOrderView extends Container {
 
 
         list = new ListContainer();
-        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 150);
+        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 200);
         loadOrders();
 
         buttonRows.setBackColor(Color.WHITE);
@@ -65,7 +65,7 @@ public class ListOrderView extends Container {
         addButton.setBackColor(Color.getRGB(46, 204, 113));
         addButton.setForeColor(Color.WHITE);
         addButton.setFont(addButton.getFont().adjustedBy(10));
-        add(addButton, RIGHT - 20, BOTTOM - 150, 60, 60);
+        add(addButton, RIGHT - 20, BOTTOM - 120, 60, 60);
 
         backButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new HomeView())

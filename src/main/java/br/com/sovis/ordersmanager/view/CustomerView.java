@@ -55,9 +55,7 @@ public class CustomerView extends Container {
                 try {
                     customerController.createCustomer(nameField.getText(), emailField.getText(), phoneField.getText());
                     Toast.show("Cliente cadastrado com sucesso!", 2000);
-                    nameField.clear();
-                    emailField.clear();
-                    phoneField.clear();
+                    MainWindow.getMainWindow().swap(new ListCustomersView());
                 } catch (Exception ex) {
                     Toast.show("Falha ao cadastrar cliente!", 2000);
                 }
