@@ -94,8 +94,8 @@ public class ListCustomersView extends Container {
 
         try {
             customerController.removerCustomer(customers[index].getId());
-            loadCustomers();
             Toast.show("Cliente removido", 2000);
+            MainWindow.getMainWindow().swap(new ListCustomersView());
         } catch (Exception e) {
             Toast.show("Falha ao remover cliente", 2000);
         }

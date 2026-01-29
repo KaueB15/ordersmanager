@@ -112,7 +112,6 @@ public class ListOrderView extends Container {
 
     private void cancelOrder() {
         int selected = list.getSelectedIndex();
-        list.removeAll();
         if (selected == -1) {
             Toast.show("Selecione um pedido", 2000);
             return;
@@ -123,7 +122,7 @@ public class ListOrderView extends Container {
         }
         try {
             orderController.cancelOrder(orders[selected].getId());
-            loadOrders();
+            MainWindow.getMainWindow().swap(new ListOrderView());
         } catch (Exception e) {
             Toast.show("Falha ao cancelar pedido", 2000);
         }
@@ -137,7 +136,7 @@ public class ListOrderView extends Container {
         }
         try {
             orderController.closeOrder(orders[selected].getId());
-            loadOrders();
+            MainWindow.getMainWindow().swap(new ListOrderView());
         } catch (Exception e) {
             Toast.show("Falha ao fechar pedido", 2000);
         }

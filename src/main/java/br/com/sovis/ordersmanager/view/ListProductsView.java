@@ -104,7 +104,7 @@ public class ListProductsView extends Container {
         try {
             int productId = products[selectedIndex].getId();
             productController.removeProduct(productId);
-            loadProducts();
+            MainWindow.getMainWindow().swap(new ListProductsView());
         } catch (Exception e) {
             Toast.show("Falha ao remover produto", 2000);
         }
