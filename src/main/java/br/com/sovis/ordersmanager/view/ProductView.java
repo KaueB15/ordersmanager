@@ -7,90 +7,127 @@ import totalcross.ui.Edit;
 import totalcross.ui.Label;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
+import totalcross.ui.font.Font;
 import totalcross.ui.gfx.Color;
 
 public class ProductView extends Container {
 
     private Label mainLabel = new Label("Cadastrar Produto");
+
     private Edit nameField = new Edit();
     private Edit descriptionField = new Edit();
     private Edit priceField = new Edit();
-    private Button registerButton = new Button("Cadastrar Produto");
+
+    private Button registerButton = new Button("Salvar");
     private Button backButton = new Button("Voltar");
+
+    private Container footer = new Container();
     private ProductController productController = new ProductController();
+
+    int boxWidth = 300;
+    int boxHeight = 50;
+    int padding = 8;
 
     @Override
     public void initUI() {
 
-        add(mainLabel, CENTER, TOP + 10);
+        setBackColor(Color.getRGB(242, 247, 244));
 
-        nameField.caption = "Nome";
-        add(nameField, CENTER, AFTER + 40);
-        
-        descriptionField.caption = "Descrição";
-        add(descriptionField, CENTER, AFTER + 40);
+        mainLabel.setForeColor(Color.getRGB(46, 204, 113));
+        mainLabel.setFont(Font.getFont(true, 22));
+        add(mainLabel, CENTER, TOP + 25);
 
-        priceField.caption = "Preço";
-        priceField.setText("1");
+        addField("Nome", nameField, AFTER + 40);
+        addField("Descrição", descriptionField, AFTER + 20);
+        addField("Preço", priceField, AFTER + 20);
+
         priceField.setValidChars("0123456789");
-        add(priceField, CENTER, AFTER + 40);
 
-        registerButton.setBackColor(Color.MAGENTA);
+        footer.setBackColor(Color.WHITE);
+        add(footer, LEFT, BOTTOM - 70, FILL, 70);
+
+        registerButton.setBackColor(Color.getRGB(46, 204, 113));
         registerButton.setForeColor(Color.WHITE);
-        add(registerButton, CENTER, AFTER + 60);
+        footer.add(registerButton, LEFT + 10, CENTER, (footer.getWidth() / 2) - 15, 45);
 
-        backButton.setBackColor(Color.RED);
+        backButton.setBackColor(Color.getRGB(244, 67, 54));
         backButton.setForeColor(Color.WHITE);
-        add(backButton, CENTER, AFTER + 10);
+        footer.add(backButton, AFTER + 10, SAME, (footer.getWidth() / 2) - 15, 45);
 
-        registerButton.addPressListener(event -> {
-
-            if (!validateProductFields(nameField, priceField)) {
-                return;
-            }
-
-            try {
-                productController.createProduct(nameField.getText(), descriptionField.getText(), Double.parseDouble(priceField.getText()));
-                Toast.show("Produto cadastrado com sucesso!", 2000);
-                MainWindow.getMainWindow().swap(new ListProductsView());
-            } catch (Exception e) {
-                Toast.show("Falha ao cadastrar produto!", 2000);
-                e.printStackTrace();
-            }
-
-        });
-
-        backButton.addPressListener(event -> {
-            MainWindow.getMainWindow().swap(new ListProductsView());
-        });
-
+        registerButton.addPressListener(e -> saveProduct());
+        backButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new ListProductsView())
+        );
     }
 
-    private boolean validateProductFields(Edit nameEdit, Edit priceEdit) {
+    private void addField(String labelText, Edit field, int posY) {
 
-        if (nameEdit.getText().trim().length() == 0) {
+        Label label = new Label(labelText);
+        label.setForeColor(Color.getRGB(44, 62, 80));
+        add(label, LEFT + 40, posY);
+
+        Container box = new Container();
+        box.setBackColor(Color.WHITE);
+        box.setBorderStyle(Container.BORDER_ROUNDED);
+        box.borderColor = Color.getRGB(46, 204, 113);
+        add(box, CENTER, AFTER + 6, boxWidth, boxHeight);
+
+        Container inner = new Container();
+        inner.setBackColor(Color.WHITE);
+        box.add(inner, LEFT + padding, TOP + padding,
+                boxWidth - padding * 2, boxHeight - padding * 2);
+
+        field.setBackColor(Color.WHITE);
+        field.setForeColor(Color.getRGB(44, 62, 80));
+        field.transparentBackground = false;
+        inner.add(field, LEFT, TOP, FILL, FILL);
+    }
+
+    private void saveProduct() {
+
+        if (!validateFields()) {
+            return;
+        }
+
+        try {
+            productController.createProduct(
+                nameField.getText(),
+                descriptionField.getText(),
+                Double.parseDouble(priceField.getText())
+            );
+
+            Toast.show("Produto cadastrado com sucesso", 2000);
+            MainWindow.getMainWindow().swap(new ListProductsView());
+
+        } catch (Exception e) {
+            Toast.show("Erro ao cadastrar produto", 2000);
+        }
+    }
+
+    private boolean validateFields() {
+
+        if (nameField.getText().trim().length() == 0) {
             Toast.show("Nome do produto é obrigatório", 2000);
-            nameEdit.requestFocus();
+            nameField.requestFocus();
             return false;
         }
 
         double price;
 
         try {
-            price = Double.parseDouble(priceEdit.getText());
+            price = Double.parseDouble(priceField.getText());
         } catch (Exception e) {
-            Toast.show("Preo inválido", 2000);
-            priceEdit.requestFocus();
+            Toast.show("Preço inválido", 2000);
+            priceField.requestFocus();
             return false;
         }
 
         if (price <= 0) {
-            Toast.show("Preço tem que ser maior que 0", 2000);
-            priceEdit.requestFocus();
+            Toast.show("Preço deve ser maior que zero", 2000);
+            priceField.requestFocus();
             return false;
         }
 
         return true;
     }
-
 }

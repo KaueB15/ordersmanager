@@ -14,108 +14,153 @@ import totalcross.ui.Edit;
 import totalcross.ui.Label;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
-import totalcross.ui.event.ControlEvent;
-import totalcross.ui.event.PressListener;
+import totalcross.ui.font.Font;
 import totalcross.ui.gfx.Color;
 
 public class OrderView extends Container {
 
-    private Label customerLabel = new Label("Clientes");
-    private Label totalLabel = new Label("Total: 0");
+    private Label mainLabel = new Label("Novo Pedido");
+    private Label totalLabel = new Label("Total: R$ 0,00");
+
+    private ComboBox customersBox;
+    private ComboBox productsBox;
+
+    private Edit quantityField = new Edit();
+
+    private Button addProductButton = new Button("Adicionar Produto");
+    private Button saveButton = new Button("Salvar");
+    private Button cancelButton = new Button("Cancelar");
+
+    private Container footer = new Container();
+
     private CustomerController customerController = new CustomerController();
     private ProductController productController = new ProductController();
     private OrderController orderController = new OrderController();
-    private ComboBox customersBox;
-    private ComboBox productsBox;
-    private Edit quantityField = new Edit();
-    private Button closeButton = new Button("Salvar Pedido");
-    private Button cancelButton = new Button("Cancelar");
-    private Button addProductButton = new Button("Adicionar Produto");
-    
+
     private Product[] products;
     private OrdersProduct[] items = new OrdersProduct[50];
     private int itemCount = 0;
     private double total = 0;
 
+    int boxWidth = 300;
+    int boxHeight = 50;
+    int padding = 8;
+
+    @Override
     public void initUI() {
+
+        setBackColor(Color.getRGB(242, 247, 244));
+
+        mainLabel.setForeColor(Color.getRGB(46, 204, 113));
+        mainLabel.setFont(Font.getFont(true, 22));
+        add(mainLabel, CENTER, TOP + 25);
+
         try {
-            add(customerLabel, LEFT + 20, TOP + 20);
-            String[] customersNames = customerController.getCustomersNames();
-            customersBox = new ComboBox(customersNames);
-            customersBox.setSelectedIndex(0);
-            add(customersBox, LEFT + 20, AFTER + 2, FILL - 40, PREFERRED);
+            Label customerLabel = new Label("Cliente");
+            customerLabel.setForeColor(Color.getRGB(44, 62, 80));
+            add(customerLabel, LEFT + 40, AFTER + 35);
+
+            customersBox = new ComboBox(customerController.getCustomersNames());
+            addCombo(customersBox);
         } catch (Exception e) {
-            e.printStackTrace();
+            Toast.show("Erro ao carregar clientes", 2000);
         }
 
-        add(new Label("Produtos"), LEFT + 20, AFTER + 10);
-
         try {
+            Label productLabel = new Label("Produto");
+            productLabel.setForeColor(Color.getRGB(44, 62, 80));
+            add(productLabel, LEFT + 40, AFTER + 20);
+
             products = productController.findAll();
-            String[] productNames = new String[products.length + 1];
-            productNames[0] = "Selecione o Produto";
-    
+            String[] names = new String[products.length + 1];
+            names[0] = "Selecione o Produto";
+
             for (int i = 0; i < products.length; i++) {
-                productNames[i + 1] = products[i].getName();
+                names[i + 1] = products[i].getName();
             }
 
-            productsBox = new ComboBox(productNames);
-            productsBox.setSelectedIndex(0);
-            add(productsBox, LEFT + 20, AFTER + 5, FILL - 40, PREFERRED);
-            
+            productsBox = new ComboBox(names);
+            addCombo(productsBox);
         } catch (Exception e) {
-            e.printStackTrace();
+            Toast.show("Erro ao carregar produtos", 2000);
         }
 
+        Label qtyLabel = new Label("Quantidade");
+        qtyLabel.setForeColor(Color.getRGB(44, 62, 80));
+        add(qtyLabel, LEFT + 40, AFTER + 20);
 
-        add(new Label("Quantidade"), LEFT + 20, AFTER + 15);
         quantityField.setText("1");
         quantityField.setValidChars("0123456789");
-        add(quantityField, LEFT + 20, AFTER + 5, FILL - 40, PREFERRED);
+        addEdit(quantityField);
 
-        add(addProductButton, CENTER, AFTER + 15);
-        
-        add(totalLabel, LEFT + 20, AFTER + 20, FILL - 40, PREFERRED);
-        
-        closeButton.setBackColor(Color.MAGENTA);
-        closeButton.setForeColor(Color.WHITE);
-        add(closeButton, CENTER, AFTER + 10);
-        
-        cancelButton.setBackColor(Color.RED);
+        addProductButton.setBackColor(Color.getRGB(156, 39, 176));
+        addProductButton.setForeColor(Color.WHITE);
+        add(addProductButton, CENTER, AFTER + 25, 220, 45);
+
+        totalLabel.setForeColor(Color.getRGB(44, 62, 80));
+        totalLabel.setFont(totalLabel.getFont().adjustedBy(4));
+        add(totalLabel, CENTER, AFTER + 25);
+
+        footer.setBackColor(Color.WHITE);
+        add(footer, LEFT, BOTTOM, FILL, 70);
+
+        saveButton.setBackColor(Color.getRGB(46, 204, 113));
+        saveButton.setForeColor(Color.WHITE);
+        footer.add(saveButton, LEFT + 10, CENTER, (footer.getWidth() / 2) - 15, 45);
+
+        cancelButton.setBackColor(Color.getRGB(244, 67, 54));
         cancelButton.setForeColor(Color.WHITE);
-        add(cancelButton, CENTER, AFTER + 10);
-        
-        cancelButton.addPressListener(new PressListener() {   
-            public void controlPressed(ControlEvent e) {
-                MainWindow.getMainWindow().swap(new ListOrderView());
-            }
-        });
-        
-        closeButton.addPressListener(new PressListener() {
-            public void controlPressed(ControlEvent e) {
-                saveOrder();
-            }
-        });
-        
-        addProductButton.addPressListener(new PressListener() {
-            public void controlPressed(ControlEvent e) {
-                addProduct();
-            }
-        });
+        footer.add(cancelButton, AFTER + 10, SAME, (footer.getWidth() / 2) - 15, 45);
+
+        addProductButton.addPressListener(e -> addProduct());
+        saveButton.addPressListener(e -> saveOrder());
+        cancelButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new ListOrderView())
+        );
+    }
+
+    private void addCombo(ComboBox box) {
+
+        Container container = new Container();
+        container.setBackColor(Color.WHITE);
+        container.setBorderStyle(Container.BORDER_ROUNDED);
+        container.borderColor = Color.getRGB(46, 204, 113);
+        add(container, CENTER, AFTER + 6, boxWidth, boxHeight);
+
+        container.add(box, LEFT + padding, TOP + padding,
+                boxWidth - padding * 2, boxHeight - padding * 2);
+    }
+
+    private void addEdit(Edit field) {
+
+        Container container = new Container();
+        container.setBackColor(Color.WHITE);
+        container.setBorderStyle(Container.BORDER_ROUNDED);
+        container.borderColor = Color.getRGB(46, 204, 113);
+        add(container, CENTER, AFTER + 6, boxWidth, boxHeight);
+
+        Container inner = new Container();
+        inner.setBackColor(Color.WHITE);
+        container.add(inner, LEFT + padding, TOP + padding,
+                boxWidth - padding * 2, boxHeight - padding * 2);
+
+        field.setBackColor(Color.WHITE);
+        field.transparentBackground = false;
+        inner.add(field, LEFT, TOP, FILL, FILL);
     }
 
     private void addProduct() {
 
         if (productsBox.getSelectedIndex() == 0) {
-            Toast.show("Selecione um Produto", 2000);
+            Toast.show("Selecione um produto", 2000);
             return;
         }
 
-        int quantity;
+        int qty;
         try {
-            quantity = Integer.parseInt(quantityField.getText());
+            qty = Integer.parseInt(quantityField.getText());
         } catch (Exception e) {
-            Toast.show("Quantidade Inválida", 2000);
+            Toast.show("Quantidade inválida", 2000);
             return;
         }
 
@@ -123,13 +168,12 @@ public class OrderView extends Container {
 
         OrdersProduct item = new OrdersProduct();
         item.setidProduct(product.getId());
-        item.setQuantity(quantity);
+        item.setQuantity(qty);
         item.setValue(product.getPrice());
 
         items[itemCount++] = item;
-
-        total += product.getPrice() * quantity;
-        totalLabel.setText("Total: " + total);
+        total += product.getPrice() * qty;
+        totalLabel.setText("Total: R$ " + total);
 
         productsBox.setSelectedIndex(0);
         quantityField.setText("1");
@@ -138,7 +182,7 @@ public class OrderView extends Container {
     private void saveOrder() {
 
         if (customersBox.getSelectedIndex() == 0) {
-            Toast.show("Selecione um Cliente", 2000);
+            Toast.show("Selecione um cliente", 2000);
             return;
         }
 
@@ -147,10 +191,8 @@ public class OrderView extends Container {
             return;
         }
 
-        int customerId = customersBox.getSelectedIndex();
-
         Orders order = new Orders();
-        order.setCustomerId(customerId);
+        order.setCustomerId(customersBox.getSelectedIndex());
         order.setOrderDate(new Time().toString());
         order.setStatus("ABERTO");
 
@@ -161,15 +203,10 @@ public class OrderView extends Container {
 
         try {
             orderController.createOrder(order, finalItems);
-            Toast.show("Pedido Salvo", 2000);
+            Toast.show("Pedido salvo com sucesso", 2000);
             MainWindow.getMainWindow().swap(new ListOrderView());
         } catch (Exception e) {
             Toast.show("Erro ao salvar pedido", 2000);
-            e.printStackTrace();
         }
     }
-
-
 }
-
-
