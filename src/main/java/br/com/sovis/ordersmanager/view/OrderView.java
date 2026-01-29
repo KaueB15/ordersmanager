@@ -99,7 +99,7 @@ public class OrderView extends Container {
 
         totalLabel.setForeColor(Color.getRGB(44, 62, 80));
         totalLabel.setFont(totalLabel.getFont().adjustedBy(4));
-        add(totalLabel, CENTER, AFTER + 25);
+        add(totalLabel, LEFT + 20, AFTER + 25, FILL, PREFERRED);
 
         footer.setBackColor(Color.WHITE);
         add(footer, LEFT, BOTTOM, FILL, 70);
