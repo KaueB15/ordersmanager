@@ -3,6 +3,7 @@ package br.com.sovis.ordersmanager.view;
 import br.com.sovis.ordersmanager.controller.CustomerController;
 import br.com.sovis.ordersmanager.controller.OrderController;
 import br.com.sovis.ordersmanager.controller.ProductController;
+import br.com.sovis.ordersmanager.model.Customer;
 import br.com.sovis.ordersmanager.model.Orders;
 import br.com.sovis.ordersmanager.model.OrdersProduct;
 import br.com.sovis.ordersmanager.model.Product;
@@ -19,7 +20,7 @@ import totalcross.ui.gfx.Color;
 
 public class OrderView extends Container {
 
-    private Label mainLabel = new Label("Novo Pedido");
+    private Label mainLabel = new Label("Pedido");
     private Label totalLabel = new Label("Total: R$ 0,00");
 
     private ComboBox customersBox;
@@ -37,14 +38,25 @@ public class OrderView extends Container {
     private ProductController productController = new ProductController();
     private OrderController orderController = new OrderController();
 
+    private Customer[] customers;
     private Product[] products;
     private OrdersProduct[] items = new OrdersProduct[50];
     private int itemCount = 0;
     private double total = 0;
 
+    private int orderId;
+
     int boxWidth = 300;
     int boxHeight = 50;
     int padding = 8;
+
+    public OrderView() {
+        this.orderId = 0;
+    }
+
+    public OrderView(int orderId) {
+        this.orderId = orderId;
+    }
 
     @Override
     public void initUI() {
@@ -60,8 +72,20 @@ public class OrderView extends Container {
             customerLabel.setForeColor(Color.getRGB(44, 62, 80));
             add(customerLabel, LEFT + 40, AFTER + 35);
 
-            customersBox = new ComboBox(customerController.getCustomersNames());
+            customers = customerController.findAll();
+            String[] names = new String[customers.length];
+
+            for (int i = 0; i < customers.length; i++) {
+                names[i] = customers[i].getName();
+            }
+
+            customersBox = new ComboBox(names);
             addCombo(customersBox);
+
+            if (orderId != 0) {
+                customersBox.setEnabled(false);
+            }
+
         } catch (Exception e) {
             Toast.show("Erro ao carregar clientes", 2000);
         }
@@ -139,14 +163,11 @@ public class OrderView extends Container {
         container.borderColor = Color.getRGB(46, 204, 113);
         add(container, CENTER, AFTER + 6, boxWidth, boxHeight);
 
-        Container inner = new Container();
-        inner.setBackColor(Color.WHITE);
-        container.add(inner, LEFT + padding, TOP + padding,
-                boxWidth - padding * 2, boxHeight - padding * 2);
-
         field.setBackColor(Color.WHITE);
         field.transparentBackground = false;
-        inner.add(field, LEFT, TOP, FILL, FILL);
+
+        container.add(field, LEFT + padding, TOP + padding,
+                boxWidth - padding * 2, boxHeight - padding * 2);
     }
 
     private void addProduct() {
@@ -181,30 +202,44 @@ public class OrderView extends Container {
 
     private void saveOrder() {
 
-        if (customersBox.getSelectedIndex() == 0) {
-            Toast.show("Selecione um cliente", 2000);
-            return;
-        }
-
         if (itemCount == 0) {
             Toast.show("Adicione um produto", 2000);
             return;
         }
 
-        Orders order = new Orders();
-        order.setCustomerId(customersBox.getSelectedIndex());
-        order.setOrderDate(new Time().toString());
-        order.setStatus("ABERTO");
-
-        OrdersProduct[] finalItems = new OrdersProduct[itemCount];
-        for (int i = 0; i < itemCount; i++) {
-            finalItems[i] = items[i];
-        }
-
         try {
-            orderController.createOrder(order, finalItems);
+
+            if (orderId == 0) {
+
+                Orders order = new Orders();
+                order.setCustomerId(
+                    customers[customersBox.getSelectedIndex()].getId()
+                );
+                order.setOrderDate(new Time().toString());
+                order.setStatus("ABERTO");
+
+                OrdersProduct[] finalItems = new OrdersProduct[itemCount];
+                for (int i = 0; i < itemCount; i++) {
+                    finalItems[i] = items[i];
+                }
+
+                orderController.createOrder(order, finalItems);
+
+            } else {
+
+                for (int i = 0; i < itemCount; i++) {
+                    orderController.addProductToOrder(
+                        orderId,
+                        items[i].getidProduct(),
+                        items[i].getValue(),
+                        items[i].getQuantity()
+                    );
+                }
+            }
+
             Toast.show("Pedido salvo com sucesso", 2000);
             MainWindow.getMainWindow().swap(new ListOrderView());
+
         } catch (Exception e) {
             Toast.show("Erro ao salvar pedido", 2000);
         }

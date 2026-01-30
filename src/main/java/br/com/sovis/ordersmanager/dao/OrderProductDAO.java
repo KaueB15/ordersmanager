@@ -87,4 +87,51 @@ public class OrderProductDAO {
 
     }
 
+    public void addProductToOrder(int orderId, int productId, double price, int quantity) throws Exception {
+
+        PreparedStatement check = connection.prepareStatement(
+            "SELECT quantity FROM product_order WHERE id_order = ? AND id_product = ?"
+        );
+
+        check.setInt(1, orderId);
+        check.setInt(2, productId);
+
+        ResultSet rs = check.executeQuery();
+
+        if (rs.next()) {
+
+            int currentQty = rs.getInt("quantity");
+
+            PreparedStatement update = connection.prepareStatement(
+                "UPDATE product_order SET quantity = ?, price = ? WHERE id_order = ? AND id_product = ?"
+            );
+
+            update.setInt(1, currentQty + quantity);
+            update.setDouble(2, price);
+            update.setInt(3, orderId);
+            update.setInt(4, productId);
+
+            update.executeUpdate();
+            update.close();
+
+        } else {
+
+            PreparedStatement insert = connection.prepareStatement(
+                "INSERT INTO product_order (id_order, id_product, price, quantity) VALUES (?, ?, ?, ?)"
+            );
+
+            insert.setInt(1, orderId);
+            insert.setInt(2, productId);
+            insert.setDouble(3, price);
+            insert.setInt(4, quantity);
+
+            insert.executeUpdate();
+            insert.close();
+        }
+
+        rs.close();
+        check.close();
+    }
+
 }
+

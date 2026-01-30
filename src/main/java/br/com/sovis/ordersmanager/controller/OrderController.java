@@ -51,4 +51,8 @@ public class OrderController {
 
     }
 
+    public void addProductToOrder(int orderId, int productId, double price, int quantity) throws Exception {
+        itemDAO.addProductToOrder(orderId, productId, price, quantity);
+    }
+
 }

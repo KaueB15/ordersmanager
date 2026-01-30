@@ -2,14 +2,13 @@ package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.OrderController;
 import br.com.sovis.ordersmanager.model.ProductItem;
+import br.com.sovis.ordersmanager.view.items.OrderProductItem;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Label;
-import totalcross.ui.ListBox;
+import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
-import totalcross.ui.event.ControlEvent;
-import totalcross.ui.event.PressListener;
 import totalcross.ui.gfx.Color;
 
 public class OrderInfoView extends Container {
@@ -18,100 +17,102 @@ public class OrderInfoView extends Container {
     private String status;
 
     private Label mainLabel = new Label("Produtos do Pedido");
-    private ListBox list;
-    private Container buttonRows = new Container();
+    private ListContainer list;
+    private Container bottomBar = new Container();
     private Button backButton = new Button("Voltar");
     private Button cancelProductButton = new Button("Retirar Produto");
-    private OrderController orderController = new OrderController();
+    private Button addProductButton = new Button("+");
 
-    private ProductItem[] productItems; 
+    private OrderController orderController = new OrderController();
+    private ProductItem[] productItems;
 
     public OrderInfoView(int orderId, String status) {
         this.orderId = orderId;
         this.status = status;
     }
-    
+
+    @Override
     public void initUI() {
 
+        setBackColor(Color.getRGB(240, 248, 243));
+
+        mainLabel.setForeColor(Color.getRGB(39, 174, 96));
         add(mainLabel, CENTER, TOP + 20);
 
-        list = new ListBox();
+        list = new ListContainer();
+        add(list, LEFT + 20, AFTER + 15, FILL - 40, FILL - 130);
         loadProducts();
-        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 150);
 
-        add(buttonRows, LEFT + 20, AFTER + 10, FILL - 40, FILL - 80);
+        add(bottomBar, LEFT, BOTTOM, FILL, 70);
+        bottomBar.setBackColor(Color.getRGB(255, 255, 255));
 
-        cancelProductButton.setBackColor(Color.MAGENTA);
+        cancelProductButton.setBackColor(Color.getRGB(39, 174, 96));
         cancelProductButton.setForeColor(Color.WHITE);
-        buttonRows.add(cancelProductButton, LEFT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
-        backButton.setBackColor(Color.RED);
+        bottomBar.add(cancelProductButton, LEFT + 10, CENTER, bottomBar.getWidth() / 2 - 15, 45);
+
+        backButton.setBackColor(Color.getRGB(231, 76, 60));
         backButton.setForeColor(Color.WHITE);
-        buttonRows.add(backButton, RIGHT, TOP, (buttonRows.getWidth() / 2) -5, PREFERRED);
+        bottomBar.add(backButton, RIGHT - 10, CENTER, bottomBar.getWidth() / 2 - 15, 45);
 
-        backButton.addPressListener(new PressListener() {
-            public void controlPressed(ControlEvent e) {
-                MainWindow.getMainWindow().swap(new ListOrderView());
+        add(addProductButton, RIGHT - 20, BOTTOM - 60, 56, 56);
+        addProductButton.setBackColor(Color.getRGB(39, 174, 96));
+        addProductButton.setForeColor(Color.WHITE);
+        addProductButton.setFont(addProductButton.getFont().adjustedBy(10));
+
+        backButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new ListOrderView())
+        );
+
+        cancelProductButton.addPressListener(e ->
+            deleteProduct()
+        );
+
+        addProductButton.addPressListener(e -> {
+
+            if (status.equals("FECHADO")) {
+                Toast.show("Pedido já fechado!", 2000);
+                return;
             }
-        });
 
-        cancelProductButton.addPressListener(new PressListener() {
-            public void controlPressed(ControlEvent e) {
-                deleteProduct();
-            }
+            MainWindow.getMainWindow().swap(new OrderView(orderId));
         });
-
-        
     }
-    
-    public void loadProducts() {
+
+    private void loadProducts() {
 
         try {
             productItems = orderController.getProductsFromOrder(orderId);
             list.removeAll();
 
             for (int i = 0; i < productItems.length; i++) {
-                ProductItem pi = productItems[i];
-
-                list.add(
-                    pi.getProductName() +
-                    " | " + pi.getQuantity() +
-                    " | Total: " + pi.getPrice()
-                );
-
+                list.addContainer(new OrderProductItem(productItems[i]));
             }
 
         } catch (Exception e) {
-            Toast.show("Erro ao carregar Produtos", 2000);
-            System.err.println(e);
+            Toast.show("Erro ao carregar produtos", 2000);
         }
-
     }
 
-    public void deleteProduct() {
+    private void deleteProduct() {
 
-        int productSelected = list.getSelectedIndex();
+        int selected = list.getSelectedIndex();
 
-        if(productSelected == -1) {
+        if (selected == -1) {
             Toast.show("Selecione um produto", 2000);
+            return;
         }
 
-        if(status.equals("FECHADO")) {
+        if (status.equals("FECHADO")) {
             Toast.show("Pedido já fechado!", 2000);
             return;
         }
 
         try {
-
-            int productId = productItems[productSelected].getItemId();
+            int productId = productItems[selected].getItemId();
             orderController.deleteProductFromOrder(orderId, productId);
-            loadProducts();
-
+            MainWindow.getMainWindow().swap(new OrderInfoView(orderId, status));
         } catch (Exception e) {
-            
-            Toast.show("Falha ao deletar produto", 2000);
-            
+            Toast.show("Falha ao remover produto", 2000);
         }
-
     }
-
 }
