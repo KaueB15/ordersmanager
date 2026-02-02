@@ -15,8 +15,8 @@ public class ordersmanager extends MainWindow {
         setRect(0, 0, 320, 480);
         try {
             Database.open();
-            // Database.createTables();
-            // Database.insertAdminUser();
+            Database.createTables();
+            Database.insertAdminUser();
         } catch (Exception e) {
             e.printStackTrace();
         }

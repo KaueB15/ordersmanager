@@ -1,19 +1,17 @@
 package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.UserController;
-import br.com.sovis.ordersmanager.model.User;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Edit;
 import totalcross.ui.Label;
-import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.font.Font;
 import totalcross.ui.gfx.Color;
 
-public class LoginView extends Container {
+public class UsersView extends Container {
 
-    private Label mainLabel = new Label("Login");
+    private Label mainLabel = new Label("Criar Usuário");
     private Label emailLabel = new Label("E-mail");
     private Label passwordLabel = new Label("Senha");
 
@@ -23,14 +21,13 @@ public class LoginView extends Container {
     private Edit userEmail = new Edit();
     private Edit userPassword = new Edit();
 
-    private Button loginButton = new Button("Logar");
+    private Button registerButton = new Button("Criar");
     private UserController userController = new UserController();
 
     int boxWidth = 280;
     int boxHeight = 50;
     int padding = 8;
 
-    @Override
     public void initUI() {
 
         setBackColor(Color.getRGB(240, 248, 243));
@@ -78,19 +75,26 @@ public class LoginView extends Container {
         passwordInner.add(userPassword, LEFT, TOP,
                 FILL, boxHeight - padding * 2);
 
-        loginButton.setBackColor(Color.getRGB(39, 174, 96));
-        loginButton.setForeColor(Color.WHITE);
-        loginButton.setFont(Font.getFont(true, 16));
-        add(loginButton, CENTER, AFTER + 40, 200, 48);
+        registerButton.setBackColor(Color.getRGB(39, 174, 96));
+        registerButton.setForeColor(Color.WHITE);
+        registerButton.setFont(Font.getFont(true, 16));
+        add(registerButton, CENTER, AFTER + 40, 200, 48);
 
-        loginButton.addPressListener(event -> {
-            User user = userController.login(userEmail.getText(), userPassword.getText());
-            if (!(user == null)) {
-                Toast.show("Login Realizado", 2000);
-                MainWindow.getMainWindow().swap(new HomeView(user.getAdmin()));
-            } else {
-                Toast.show("Falha no login", 2000);
-            }
+        registerButton.addPressListener(event -> {
+            createUser();
         });
+
     }
+
+    private void createUser() {
+
+        try {
+            userController.createUser(userEmail.getText(), userPassword.getText());
+            Toast.show("Usuário criado com sucesso", 2000);  
+        } catch (Exception e) {
+            Toast.show("Erro ao criar usuário", 2000);
+        }
+
+    }
+
 }

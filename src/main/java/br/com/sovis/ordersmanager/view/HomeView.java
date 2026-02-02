@@ -18,10 +18,16 @@ public class HomeView extends Container {
     private Button customerButton = new Button("Clientes");
     private Button productsButton = new Button("Produtos");
     private Button ordersButton = new Button("Pedidos");
+    private Button usersButton = new Button("Usuários");
     private Button exitButton = new Button("Sair");
 
     private Container sideMenu = new Container();
     private boolean menuVisible = false;
+    private int isAdmin;
+
+    public HomeView(int isAdmin) {
+        this.isAdmin = isAdmin;
+    }
 
     @Override
     public void initUI() {
@@ -42,16 +48,20 @@ public class HomeView extends Container {
         sideMenu.setBackColor(Color.getRGB(39, 174, 96));
         sideMenu.setVisible(false);
         add(sideMenu, LEFT, TOP, 200, FILL);
-
+        
         addMenuButton(customerButton);
         addMenuButton(productsButton);
         addMenuButton(ordersButton);
+        if(isAdmin == 1){
+            addMenuButton(usersButton);
+        }
         addMenuButton(exitButton);
 
         customerButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListCustomersView()));
         productsButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListProductsView()));
         ordersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListOrderView()));
         exitButton.addPressListener(event -> MainWindow.getMainWindow().swap(new LoginView()));
+        usersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new UsersView()));
 
         addPenListener(new PenListener() {
             @Override

@@ -118,8 +118,8 @@ public class CustomerView extends Container {
             return false;
         }
 
-        if (phoneField.getText().length() != 11) {
-            Toast.show("Telefone deve ter 11 dígitos", 2000);
+        if (phoneField.getText().length() != 13) {
+            Toast.show("Telefone deve ter 13 dígitos", 2000);
             phoneField.requestFocus();
             return false;
         }

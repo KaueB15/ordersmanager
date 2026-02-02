@@ -23,6 +23,7 @@ public class Database {
             "CREATE TABLE IF NOT EXISTS users (" +
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "email TEXT NOT NULL UNIQUE," +
+            "admin INTEGER NOT NULL," +
             "password TEXT NOT NULL)"
         );
 
@@ -68,11 +69,12 @@ public class Database {
 
     public static void insertAdminUser() throws Exception {
         String sql =
-            "INSERT OR IGNORE INTO users (email, password) VALUES (?, ?)";
+            "INSERT OR IGNORE INTO users (email, password, admin) VALUES (?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setString(1, "admin");
         ps.setString(2, "123");
+        ps.setInt(3, 1);
         ps.executeUpdate();
         ps.close();
     }
