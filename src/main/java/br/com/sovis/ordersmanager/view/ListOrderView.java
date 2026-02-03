@@ -110,10 +110,15 @@ public class ListOrderView extends Container {
             orders = orderController.findAll();
             list.removeAll();
             for (int i = 0; i < orders.length; i++) {
-                list.addContainer(new OrderItem(orders[i]));
+                if(user.getAdmin() == 1 ){
+                    list.addContainer(new OrderItem(orders[i]));
+                } else if (orders[i].getUserId() == user.getId()) {
+                    list.addContainer(new OrderItem(orders[i]));
+                }
             }
         } catch (Exception e) {
             Toast.show("Erro ao carregar pedidos", 2000);
+            System.err.println(e);
         }
     }
 

@@ -25,14 +25,15 @@ public class OrderDAO {
     public int insert(Orders order) throws Exception {
 
         String sql =
-            "INSERT INTO orders (id_customer, total_price, order_date, status) " +
-            "VALUES (?, ?, ?, ?)";
+            "INSERT INTO orders (id_customer, id_user, total_price, order_date, status) " +
+            "VALUES (?, ?, ?, ?, ?)";
 
         PreparedStatement ps = connection.prepareStatement(sql);
         ps.setInt(1, order.getCustomerId());
-        ps.setDouble(2, 0);
-        ps.setString(3, order.getOrderDate());
-        ps.setString(4, order.getStatus());
+        ps.setInt(2, order.getUserId());
+        ps.setDouble(3, 0);
+        ps.setString(4, order.getOrderDate());
+        ps.setString(5, order.getStatus());
         ps.executeUpdate();
         ps.close();
         
@@ -89,7 +90,7 @@ public class OrderDAO {
     public Orders[] findAll() throws Exception {
 
         String sql =
-            "SELECT o.id, o.order_date, o.total_price, o.status, c.name AS customer_name " +
+            "SELECT o.id, o.id_user, o.order_date, o.total_price, o.status, c.name AS customer_name " +
             "FROM orders o " +
             "JOIN customer c ON c.id = o.id_customer " +
             "ORDER BY o.id DESC";
@@ -107,6 +108,7 @@ public class OrderDAO {
             order.setTotalValue(rs.getDouble("total_price"));
             order.setStatus(rs.getString("status"));
             order.setStatus(order.getStatus() + " - " + rs.getString("customer_name"));
+            order.setUserId(rs.getInt("id_user"));
             list.addElement(order);
         }
 

@@ -17,11 +17,13 @@ public class UsersView extends Container {
 
     private Container emailBox = new Container();
     private Container passwordBox = new Container();
+    private Container footer = new Container();
 
     private Edit userEmail = new Edit();
     private Edit userPassword = new Edit();
 
     private Button registerButton = new Button("Criar");
+    private Button backButton = new Button("Voltar");
     private UserController userController = new UserController();
 
     int boxWidth = 280;
@@ -75,10 +77,16 @@ public class UsersView extends Container {
         passwordInner.add(userPassword, LEFT, TOP,
                 FILL, boxHeight - padding * 2);
 
-        registerButton.setBackColor(Color.getRGB(39, 174, 96));
+        footer.setBackColor(Color.WHITE);
+        add(footer, LEFT, BOTTOM - 70, FILL, 70);
+
+        registerButton.setBackColor(Color.getRGB(46, 204, 113));
         registerButton.setForeColor(Color.WHITE);
-        registerButton.setFont(Font.getFont(true, 16));
-        add(registerButton, CENTER, AFTER + 40, 200, 48);
+        footer.add(registerButton, LEFT + 10, CENTER, (footer.getWidth() / 2) - 15, 45);
+
+        backButton.setBackColor(Color.getRGB(244, 67, 54));
+        backButton.setForeColor(Color.WHITE);
+        footer.add(backButton, AFTER + 10, SAME, (footer.getWidth() / 2) - 15, 45);
 
         registerButton.addPressListener(event -> {
             createUser();

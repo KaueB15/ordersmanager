@@ -213,12 +213,15 @@ public class OrderView extends Container {
 
         try {
 
+            System.err.println(user.getId());
+
             if (orderId == 0) {
 
                 Orders order = new Orders();
                 order.setCustomerId(
                     customers[customersBox.getSelectedIndex()].getId()
                 );
+                order.setUserId(user.getId());
                 order.setOrderDate(new Time().toString());
                 order.setStatus("ABERTO");
 
@@ -246,6 +249,7 @@ public class OrderView extends Container {
 
         } catch (Exception e) {
             Toast.show("Erro ao salvar pedido", 2000);
+            System.err.println(e);
         }
     }
 }

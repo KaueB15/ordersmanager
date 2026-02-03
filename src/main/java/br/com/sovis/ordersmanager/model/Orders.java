@@ -4,6 +4,7 @@ public class Orders {
 
     private int id;
     private int customerId;
+    private int userId;
     private double totalValue;
     private String orderDate;
     private String status;
@@ -46,6 +47,14 @@ public class Orders {
 
     public void setStatus(String status) { 
         this.status = status; 
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 
 }
