@@ -7,6 +7,7 @@ import br.com.sovis.ordersmanager.model.Customer;
 import br.com.sovis.ordersmanager.model.Orders;
 import br.com.sovis.ordersmanager.model.OrdersProduct;
 import br.com.sovis.ordersmanager.model.Product;
+import br.com.sovis.ordersmanager.model.User;
 import totalcross.sys.Time;
 import totalcross.ui.Button;
 import totalcross.ui.ComboBox;
@@ -45,17 +46,20 @@ public class OrderView extends Container {
     private double total = 0;
 
     private int orderId;
+    private User user;
 
     int boxWidth = 300;
     int boxHeight = 50;
     int padding = 8;
 
-    public OrderView() {
+    public OrderView(User user) {
         this.orderId = 0;
+        this.user = user;
     }
 
-    public OrderView(int orderId) {
+    public OrderView(int orderId, User user) {
         this.orderId = orderId;
+        this.user = user;
     }
 
     @Override
@@ -139,7 +143,7 @@ public class OrderView extends Container {
         addProductButton.addPressListener(e -> addProduct());
         saveButton.addPressListener(e -> saveOrder());
         cancelButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new ListOrderView())
+            MainWindow.getMainWindow().swap(new ListOrderView(user))
         );
     }
 
@@ -238,7 +242,7 @@ public class OrderView extends Container {
             }
 
             Toast.show("Pedido salvo com sucesso", 2000);
-            MainWindow.getMainWindow().swap(new ListOrderView());
+            MainWindow.getMainWindow().swap(new ListOrderView(user));
 
         } catch (Exception e) {
             Toast.show("Erro ao salvar pedido", 2000);

@@ -1,6 +1,7 @@
 package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.CustomerController;
+import br.com.sovis.ordersmanager.model.User;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Edit;
@@ -23,10 +24,15 @@ public class CustomerView extends Container {
 
     private Container footer = new Container();
     private CustomerController customerController = new CustomerController();
+    private User user;
 
     int boxWidth = 300;
     int boxHeight = 50;
     int padding = 8;
+    
+    public CustomerView(User user) {
+        this.user = user;
+    }
 
     @Override
     public void initUI() {
@@ -56,7 +62,7 @@ public class CustomerView extends Container {
 
         registerButton.addPressListener(e -> saveCustomer());
         backButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new ListCustomersView())
+            MainWindow.getMainWindow().swap(new ListCustomersView(user))
         );
     }
 
@@ -97,7 +103,7 @@ public class CustomerView extends Container {
             );
 
             Toast.show("Cliente cadastrado com sucesso", 2000);
-            MainWindow.getMainWindow().swap(new ListCustomersView());
+            MainWindow.getMainWindow().swap(new ListCustomersView(user));
 
         } catch (Exception e) {
             Toast.show("Erro ao cadastrar cliente", 2000);

@@ -1,5 +1,6 @@
 package br.com.sovis.ordersmanager.view;
 
+import br.com.sovis.ordersmanager.model.User;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Label;
@@ -23,10 +24,10 @@ public class HomeView extends Container {
 
     private Container sideMenu = new Container();
     private boolean menuVisible = false;
-    private int isAdmin;
+    private User user;
 
-    public HomeView(int isAdmin) {
-        this.isAdmin = isAdmin;
+    public HomeView(User user) {
+        this.user = user;
     }
 
     @Override
@@ -52,14 +53,14 @@ public class HomeView extends Container {
         addMenuButton(customerButton);
         addMenuButton(productsButton);
         addMenuButton(ordersButton);
-        if(isAdmin == 1){
+        if(user.getAdmin() == 1){
             addMenuButton(usersButton);
         }
         addMenuButton(exitButton);
 
-        customerButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListCustomersView()));
-        productsButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListProductsView()));
-        ordersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListOrderView()));
+        customerButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListCustomersView(user)));
+        productsButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListProductsView(user)));
+        ordersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListOrderView(user)));
         exitButton.addPressListener(event -> MainWindow.getMainWindow().swap(new LoginView()));
         usersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new UsersView()));
 

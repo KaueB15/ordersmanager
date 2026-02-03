@@ -2,6 +2,7 @@ package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.CustomerController;
 import br.com.sovis.ordersmanager.model.Customer;
+import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.items.CustomerItem;
 import totalcross.ui.*;
 import totalcross.ui.gfx.Color;
@@ -20,6 +21,11 @@ public class ListCustomersView extends Container {
 
     private CustomerController customerController = new CustomerController();
     private Customer[] customers;
+    private User user;
+
+    public ListCustomersView(User user) {
+        this.user = user;
+    }
 
     @Override
     public void initUI() {
@@ -58,7 +64,7 @@ public class ListCustomersView extends Container {
         add(addCustomerButton, RIGHT - 20, BOTTOM - 60, 60, 60);
 
         backButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new HomeView())
+            MainWindow.getMainWindow().swap(new HomeView(user))
         );
 
         removeCustomerButton.addPressListener(e ->
@@ -66,7 +72,7 @@ public class ListCustomersView extends Container {
         );
 
         addCustomerButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new CustomerView())
+            MainWindow.getMainWindow().swap(new CustomerView(user))
         );
     }
 
@@ -95,7 +101,7 @@ public class ListCustomersView extends Container {
         try {
             customerController.removerCustomer(customers[index].getId());
             Toast.show("Cliente removido", 2000);
-            MainWindow.getMainWindow().swap(new ListCustomersView());
+            MainWindow.getMainWindow().swap(new ListCustomersView(user));
         } catch (Exception e) {
             Toast.show("Falha ao remover cliente", 2000);
         }

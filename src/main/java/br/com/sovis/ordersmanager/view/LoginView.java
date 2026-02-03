@@ -87,7 +87,7 @@ public class LoginView extends Container {
             User user = userController.login(userEmail.getText(), userPassword.getText());
             if (!(user == null)) {
                 Toast.show("Login Realizado", 2000);
-                MainWindow.getMainWindow().swap(new HomeView(user.getAdmin()));
+                MainWindow.getMainWindow().swap(new HomeView(user));
             } else {
                 Toast.show("Falha no login", 2000);
             }

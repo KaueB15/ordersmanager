@@ -2,6 +2,7 @@ package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.OrderController;
 import br.com.sovis.ordersmanager.model.Orders;
+import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.items.OrderItem;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
@@ -25,6 +26,11 @@ public class ListOrderView extends Container {
 
     private OrderController orderController = new OrderController();
     private Orders[] orders;
+    private User user;
+
+    public ListOrderView(User user) {
+        this.user = user;
+    }
 
     @Override
     public void initUI() {
@@ -68,7 +74,7 @@ public class ListOrderView extends Container {
         add(addButton, RIGHT - 20, BOTTOM - 120, 60, 60);
 
         backButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new HomeView())
+            MainWindow.getMainWindow().swap(new HomeView(user))
         );
 
         cancelOrderButton.addPressListener(e ->
@@ -88,13 +94,14 @@ public class ListOrderView extends Container {
             MainWindow.getMainWindow().swap(
                 new OrderInfoView(
                     orders[selected].getId(),
-                    orders[selected].getStatus().split(" ")[0]
+                    orders[selected].getStatus().split(" ")[0],
+                    user
                 )
             );
         });
 
         addButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new OrderView())
+            MainWindow.getMainWindow().swap(new OrderView(user))
         );
     }
 
@@ -122,7 +129,7 @@ public class ListOrderView extends Container {
         }
         try {
             orderController.cancelOrder(orders[selected].getId());
-            MainWindow.getMainWindow().swap(new ListOrderView());
+            MainWindow.getMainWindow().swap(new ListOrderView(user));
         } catch (Exception e) {
             Toast.show("Falha ao cancelar pedido", 2000);
         }
@@ -136,7 +143,7 @@ public class ListOrderView extends Container {
         }
         try {
             orderController.closeOrder(orders[selected].getId());
-            MainWindow.getMainWindow().swap(new ListOrderView());
+            MainWindow.getMainWindow().swap(new ListOrderView(user));
         } catch (Exception e) {
             Toast.show("Falha ao fechar pedido", 2000);
         }

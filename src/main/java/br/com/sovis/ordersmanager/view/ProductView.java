@@ -1,6 +1,7 @@
 package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.ProductController;
+import br.com.sovis.ordersmanager.model.User;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Edit;
@@ -23,10 +24,15 @@ public class ProductView extends Container {
 
     private Container footer = new Container();
     private ProductController productController = new ProductController();
+    private User user;
 
     int boxWidth = 300;
     int boxHeight = 50;
     int padding = 8;
+
+    public ProductView(User user) {
+        this.user = user;
+    }
 
     @Override
     public void initUI() {
@@ -56,7 +62,7 @@ public class ProductView extends Container {
 
         registerButton.addPressListener(e -> saveProduct());
         backButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new ListProductsView())
+            MainWindow.getMainWindow().swap(new ListProductsView(user))
         );
     }
 
@@ -97,7 +103,7 @@ public class ProductView extends Container {
             );
 
             Toast.show("Produto cadastrado com sucesso", 2000);
-            MainWindow.getMainWindow().swap(new ListProductsView());
+            MainWindow.getMainWindow().swap(new ListProductsView(user));
 
         } catch (Exception e) {
             Toast.show("Erro ao cadastrar produto", 2000);

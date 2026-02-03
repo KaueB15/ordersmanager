@@ -2,6 +2,7 @@ package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.OrderController;
 import br.com.sovis.ordersmanager.model.ProductItem;
+import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.items.OrderProductItem;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
@@ -25,10 +26,12 @@ public class OrderInfoView extends Container {
 
     private OrderController orderController = new OrderController();
     private ProductItem[] productItems;
+    private User user;
 
-    public OrderInfoView(int orderId, String status) {
+    public OrderInfoView(int orderId, String status, User user) {
         this.orderId = orderId;
         this.status = status;
+        this.user = user;
     }
 
     @Override
@@ -60,7 +63,7 @@ public class OrderInfoView extends Container {
         addProductButton.setFont(addProductButton.getFont().adjustedBy(10));
 
         backButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new ListOrderView())
+            MainWindow.getMainWindow().swap(new ListOrderView(user))
         );
 
         cancelProductButton.addPressListener(e ->
@@ -74,7 +77,7 @@ public class OrderInfoView extends Container {
                 return;
             }
 
-            MainWindow.getMainWindow().swap(new OrderView(orderId));
+            MainWindow.getMainWindow().swap(new OrderView(orderId, user));
         });
     }
 
@@ -110,7 +113,7 @@ public class OrderInfoView extends Container {
         try {
             int productId = productItems[selected].getItemId();
             orderController.deleteProductFromOrder(orderId, productId);
-            MainWindow.getMainWindow().swap(new OrderInfoView(orderId, status));
+            MainWindow.getMainWindow().swap(new OrderInfoView(orderId, status, user));
         } catch (Exception e) {
             Toast.show("Falha ao remover produto", 2000);
         }

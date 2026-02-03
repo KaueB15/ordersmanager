@@ -2,6 +2,7 @@ package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.ProductController;
 import br.com.sovis.ordersmanager.model.Product;
+import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.items.ProductItem;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
@@ -22,6 +23,11 @@ public class ListProductsView extends Container {
 
     private ProductController productController = new ProductController();
     private Product[] products;
+    private User user;
+
+    public ListProductsView(User user) {
+        this.user = user;
+    }
 
     @Override
     public void initUI() {
@@ -66,7 +72,7 @@ public class ListProductsView extends Container {
         add(addButton, RIGHT - 20, BOTTOM - 60, 60, 60);
 
         backButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new HomeView())
+            MainWindow.getMainWindow().swap(new HomeView(user))
         );
 
         removeProductButton.addPressListener(e ->
@@ -74,7 +80,7 @@ public class ListProductsView extends Container {
         );
 
         addButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new ProductView())
+            MainWindow.getMainWindow().swap(new ProductView(user))
         );
     }
 
@@ -104,7 +110,7 @@ public class ListProductsView extends Container {
         try {
             int productId = products[selectedIndex].getId();
             productController.removeProduct(productId);
-            MainWindow.getMainWindow().swap(new ListProductsView());
+            MainWindow.getMainWindow().swap(new ListProductsView(user));
         } catch (Exception e) {
             Toast.show("Falha ao remover produto", 2000);
         }
