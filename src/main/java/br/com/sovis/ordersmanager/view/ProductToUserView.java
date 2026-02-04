@@ -144,10 +144,19 @@ public class ProductToUserView extends Container {
         UsersProduct item = new UsersProduct();
         item.setIdProduct(product.getId());
         item.setIdUser(userId);
+        try {
+            if(userController.productAlreadyAssocieated(item)) {
+                Toast.show("Produto já associado", 2000);
+                return;
+            }
+            items[itemCount++] = item;
+    
+            productsBox.setSelectedIndex(0);
+        } catch (Exception e) {
+            Toast.show("Erro ao adicionar produto", 2000);
+            System.err.println(e);
+        }
 
-        items[itemCount++] = item;
-
-        productsBox.setSelectedIndex(0);
     }
 
     private void saveAssociation() {
@@ -158,9 +167,9 @@ public class ProductToUserView extends Container {
 
         try {
             UsersProduct[] finalItems = new UsersProduct[itemCount];
-                for (int i = 0; i < itemCount; i++) {
-                    finalItems[i] = items[i];
-                }
+            for (int i = 0; i < itemCount; i++) {
+                finalItems[i] = items[i];
+            }
             userController.createUserProductAssociation(finalItems);
             Toast.show("Produtos associados com sucesso", 2000);
             MainWindow.getMainWindow().swap(new ListProductsView(user));

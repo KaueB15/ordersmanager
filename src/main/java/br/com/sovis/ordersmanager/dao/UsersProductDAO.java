@@ -70,4 +70,21 @@ public class UsersProductDAO {
         return result;
     }
 
+    public boolean productAlreadyAssocieated(UsersProduct item) throws Exception {
+        PreparedStatement ps = connection.prepareStatement(
+            "SELECT * FROM product_user WHERE id_user = ? AND id_product = ?"
+        );
+
+        ps.setInt(1, item.getIdUser());
+        ps.setInt(2, item.getIdProduct());
+
+        ResultSet rs = ps.executeQuery();
+        boolean exists = rs.next();
+
+        ps.close();
+        rs.close();
+
+        return exists;
+    }
+
 }
