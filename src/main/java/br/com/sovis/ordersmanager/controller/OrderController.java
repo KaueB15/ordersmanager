@@ -8,8 +8,13 @@ import br.com.sovis.ordersmanager.model.ProductItem;
 
 public class OrderController {
 
-     private OrderDAO orderDAO = new OrderDAO();
-    private OrderProductDAO itemDAO = new OrderProductDAO();
+    private OrderDAO orderDAO;
+    private OrderProductDAO itemDAO;
+
+    public OrderController() {
+        orderDAO = new OrderDAO();
+        itemDAO = new OrderProductDAO();
+    }
 
     public void createOrder(Orders order, OrdersProduct[] items) throws Exception {
 

@@ -212,9 +212,6 @@ public class OrderView extends Container {
         }
 
         try {
-
-            System.err.println(user.getId());
-
             if (orderId == 0) {
 
                 Orders order = new Orders();

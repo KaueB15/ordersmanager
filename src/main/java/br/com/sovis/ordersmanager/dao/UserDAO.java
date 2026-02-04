@@ -7,6 +7,7 @@ import br.com.sovis.ordersmanager.model.User;
 import totalcross.sql.Connection;
 import totalcross.sql.PreparedStatement;
 import totalcross.sql.ResultSet;
+import totalcross.util.Vector;
 
 public class UserDAO {
 
@@ -52,6 +53,26 @@ public class UserDAO {
 
         return null;
         
+    }
+
+    public User[] findAll() throws Exception {
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM users");
+        ResultSet rs = ps.executeQuery();
+        
+        Vector vector = new Vector();
+
+        while(rs.next()) {
+            User user = new User();
+
+            user.setId(rs.getInt("id"));
+            user.setEmail(rs.getString("email"));
+            vector.addElement(user);
+        }
+
+        User[] users = new User[vector.size()];
+        vector.copyInto(users);
+
+        return users;
     }
 
 }

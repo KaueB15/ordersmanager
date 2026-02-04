@@ -71,6 +71,12 @@ public class ListProductsView extends Container {
         addButton.setFont(addButton.getFont().adjustedBy(10));
         add(addButton, RIGHT - 20, BOTTOM - 60, 60, 60);
 
+        Button assButton = new Button("=");
+        assButton.setBackColor(Color.getRGB(46, 204, 113));
+        assButton.setForeColor(Color.WHITE);
+        assButton.setFont(assButton.getFont().adjustedBy(10));
+        add(assButton, RIGHT - 80, BOTTOM - 60, 60, 60);
+
         backButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new HomeView(user))
         );
@@ -82,6 +88,11 @@ public class ListProductsView extends Container {
         addButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new ProductView(user))
         );
+
+        assButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new ProductToUserView(user))
+        );
+        
     }
 
     private void loadProducts() {
