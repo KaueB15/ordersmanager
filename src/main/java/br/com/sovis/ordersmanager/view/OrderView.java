@@ -99,7 +99,11 @@ public class OrderView extends Container {
             productLabel.setForeColor(Color.getRGB(44, 62, 80));
             add(productLabel, LEFT + 40, AFTER + 20);
 
-            products = productController.findAll();
+            if(user.getAdmin() == 1) {
+                products = productController.findAll();
+            } else {
+                products = productController.findByUserId(user.getId());
+            }
             String[] names = new String[products.length + 1];
             names[0] = "Selecione o Produto";
 

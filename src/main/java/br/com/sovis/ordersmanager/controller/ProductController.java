@@ -1,14 +1,17 @@
 package br.com.sovis.ordersmanager.controller;
 
 import br.com.sovis.ordersmanager.dao.ProductDAO;
+import br.com.sovis.ordersmanager.dao.UsersProductDAO;
 import br.com.sovis.ordersmanager.model.Product;
 
 public class ProductController {
 
     private ProductDAO productDAO;
+    private UsersProductDAO usersProductDAO;
 
     public ProductController() {
         this.productDAO = new ProductDAO();
+        this.usersProductDAO = new UsersProductDAO();
     }
 
     public void createProduct(String name, String description, double price) throws Exception {
@@ -28,6 +31,10 @@ public class ProductController {
 
     public void removeProduct(int productId) throws Exception {
         productDAO.removeProduct(productId);
+    }
+
+    public Product[] findByUserId(int userId) throws Exception {
+        return usersProductDAO.findByUserId(userId);
     }
 
 }

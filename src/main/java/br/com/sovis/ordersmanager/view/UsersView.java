@@ -1,10 +1,12 @@
 package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.UserController;
+import br.com.sovis.ordersmanager.model.User;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Edit;
 import totalcross.ui.Label;
+import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.font.Font;
 import totalcross.ui.gfx.Color;
@@ -26,9 +28,15 @@ public class UsersView extends Container {
     private Button backButton = new Button("Voltar");
     private UserController userController = new UserController();
 
+    private User user;
+
     int boxWidth = 280;
     int boxHeight = 50;
     int padding = 8;
+
+    public UsersView(User user) {
+        this.user = user;
+    }
 
     public void initUI() {
 
@@ -92,6 +100,10 @@ public class UsersView extends Container {
             createUser();
         });
 
+        backButton.addPressListener(event -> {
+            MainWindow.getMainWindow().swap(new HomeView(user));
+        });
+
     }
 
     private void createUser() {
@@ -99,6 +111,7 @@ public class UsersView extends Container {
         try {
             userController.createUser(userEmail.getText(), userPassword.getText());
             Toast.show("Usuário criado com sucesso", 2000);  
+            MainWindow.getMainWindow().swap(new HomeView(user));
         } catch (Exception e) {
             Toast.show("Erro ao criar usuário", 2000);
         }

@@ -65,17 +65,28 @@ public class ListProductsView extends Container {
             45
         );
 
-        Button addButton = new Button("+");
-        addButton.setBackColor(Color.getRGB(46, 204, 113));
-        addButton.setForeColor(Color.WHITE);
-        addButton.setFont(addButton.getFont().adjustedBy(10));
-        add(addButton, RIGHT - 20, BOTTOM - 60, 60, 60);
+        if(user.getAdmin() == 1) {
+            Button addButton = new Button("+");
+            addButton.setBackColor(Color.getRGB(46, 204, 113));
+            addButton.setForeColor(Color.WHITE);
+            addButton.setFont(addButton.getFont().adjustedBy(10));
+            add(addButton, RIGHT - 20, BOTTOM - 60, 60, 60);
+    
+            Button assButton = new Button("=");
+            assButton.setBackColor(Color.getRGB(46, 204, 113));
+            assButton.setForeColor(Color.WHITE);
+            assButton.setFont(assButton.getFont().adjustedBy(10));
+            add(assButton, RIGHT - 80, BOTTOM - 60, 60, 60);
+    
+            addButton.addPressListener(e ->
+                MainWindow.getMainWindow().swap(new ProductView(user))
+            );
+    
+            assButton.addPressListener(e ->
+                MainWindow.getMainWindow().swap(new ProductToUserView(user))
+            );
+        }
 
-        Button assButton = new Button("=");
-        assButton.setBackColor(Color.getRGB(46, 204, 113));
-        assButton.setForeColor(Color.WHITE);
-        assButton.setFont(assButton.getFont().adjustedBy(10));
-        add(assButton, RIGHT - 80, BOTTOM - 60, 60, 60);
 
         backButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new HomeView(user))
@@ -84,20 +95,17 @@ public class ListProductsView extends Container {
         removeProductButton.addPressListener(e ->
             removeProduct()
         );
-
-        addButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new ProductView(user))
-        );
-
-        assButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new ProductToUserView(user))
-        );
         
     }
 
     private void loadProducts() {
         try {
-            products = productController.findAll();
+            if(user.getAdmin() == 1) {
+                products = productController.findAll();
+            } else {
+                products = productController.findByUserId(user.getId());
+            }
+            
             list.removeAll();
 
             for (int i = 0; i < products.length; i++) {

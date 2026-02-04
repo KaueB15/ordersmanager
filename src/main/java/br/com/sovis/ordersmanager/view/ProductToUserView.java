@@ -153,6 +153,7 @@ public class ProductToUserView extends Container {
     private void saveAssociation() {
         if(itemCount == 0) {
             Toast.show("Adicione um produto", 2000);
+            return;
         }
 
         try {
