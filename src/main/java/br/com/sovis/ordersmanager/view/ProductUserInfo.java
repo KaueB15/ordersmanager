@@ -1,6 +1,7 @@
 package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.ProductController;
+import br.com.sovis.ordersmanager.controller.UserController;
 import br.com.sovis.ordersmanager.model.Product;
 import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.items.UserProductItem;
@@ -22,6 +23,7 @@ public class ProductUserInfo extends Container {
 
     private int userId;
     private ProductController productController = new ProductController();
+    private UserController userController = new UserController();
     private Product[] productItems;
     private User user;
 
@@ -65,7 +67,6 @@ public class ProductUserInfo extends Container {
     private void loadProducts() {
 
         try {
-            System.err.println(userId);
             productItems = productController.findByUserId(userId);
             list.removeAll();
 
@@ -87,12 +88,13 @@ public class ProductUserInfo extends Container {
             return;
         }
 
-        // try {
-        //     int productId = productItems[selected].getItemId();
-        //     orderController.deleteProductFromOrder(orderId, productId);
-        //     MainWindow.getMainWindow().swap(new OrderInfoView(orderId, status, user));
-        // } catch (Exception e) {
-        //     Toast.show("Falha ao remover produto", 2000);
-        // }
+        try {
+            int productId = productItems[selected].getId();
+            userController.deleteProductFromUser(userId, productId);
+            MainWindow.getMainWindow().swap(new ProductUserInfo(user, userId));
+            Toast.show("Produto removido", 2000);
+        } catch (Exception e) {
+            Toast.show("Falha ao remover produto", 2000);
+        }
     }
 }

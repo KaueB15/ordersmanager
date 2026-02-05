@@ -87,4 +87,14 @@ public class UsersProductDAO {
         return exists;
     }
 
+    public void deleteProductFromUser(int userId, int productId) throws Exception {
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM product_user WHERE id_user = ? AND id_product = ?");
+
+        ps.setInt(1, userId);
+        ps.setInt(2, productId);
+
+        ps.executeUpdate();
+        ps.close();
+    }
+
 }

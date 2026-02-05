@@ -52,4 +52,8 @@ public class UserController {
         userDAO.removeUser(userId);
     }
 
+    public void deleteProductFromUser(int userId, int productId) throws Exception {
+        usersProductDAO.deleteProductFromUser(userId, productId);
+    }
+
 }
