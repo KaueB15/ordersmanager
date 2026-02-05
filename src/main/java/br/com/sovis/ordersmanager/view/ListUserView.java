@@ -21,6 +21,7 @@ public class ListUserView extends Container {
     private Button backButton = new Button("Voltar");
     private Button removeCustomerButton = new Button("Remover");
     private Button addUserButton = new Button("+");
+    private Button assButton = new Button("=");
 
     private UserController userController = new UserController();
     private User[] users;
@@ -62,12 +63,15 @@ public class ListUserView extends Container {
         backButton.setForeColor(Color.WHITE);
         buttonRows.add(backButton, AFTER + 10, SAME, (buttonRows.getWidth() / 2) - 15, 45);
 
-        if(user.getAdmin() == 1) {
-            addUserButton.setBackColor(Color.getRGB(46, 204, 113));
-            addUserButton.setForeColor(Color.WHITE);
-            addUserButton.setFont(addUserButton.getFont().adjustedBy(10));
-            add(addUserButton, RIGHT - 20, BOTTOM - 60, 60, 60);
-        }
+        addUserButton.setBackColor(Color.getRGB(46, 204, 113));
+        addUserButton.setForeColor(Color.WHITE);
+        addUserButton.setFont(addUserButton.getFont().adjustedBy(10));
+        add(addUserButton, RIGHT - 20, BOTTOM - 60, 60, 60);
+
+        assButton.setBackColor(Color.getRGB(46, 204, 113));
+        assButton.setForeColor(Color.WHITE);
+        assButton.setFont(assButton.getFont().adjustedBy(10));
+        add(assButton, RIGHT - 80, BOTTOM - 60, 60, 60);
 
 
         backButton.addPressListener(e ->
@@ -77,6 +81,14 @@ public class ListUserView extends Container {
         removeCustomerButton.addPressListener(e ->
             removeUser()
         );
+
+        assButton.addPressListener(e -> {
+            if(users[list.getSelectedIndex()].getEmail().equals("admin")) {
+                Toast.show("Admin tem acesso a todos produtos", 2000);
+            } else {
+                MainWindow.getMainWindow().swap(new ProductUserInfo(user, users[list.getSelectedIndex()].getId()));
+            }
+        });
 
         addUserButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new UsersView(user))
@@ -89,9 +101,7 @@ public class ListUserView extends Container {
             users = userController.findAll();
             list.removeAll();
             for (User u : users) {
-                if(!u.getEmail().equals("admin")) {
-                    list.addContainer(new UserItem(u));
-                }
+                list.addContainer(new UserItem(u));
             }
         } catch (Exception e) {
             Toast.show("Erro ao carregar clientes", 2000);
@@ -104,6 +114,11 @@ public class ListUserView extends Container {
 
         if (index == -1) {
             Toast.show("Selecione um cliente", 2000);
+            return;
+        }
+
+        if(users[index].getEmail().equals("admin")) {
+            Toast.show("Não possivel se remover", 2000);
             return;
         }
 
