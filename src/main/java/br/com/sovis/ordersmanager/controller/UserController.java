@@ -46,6 +46,10 @@ public class UserController {
 
     public boolean productAlreadyAssocieated(UsersProduct item) throws Exception {
         return usersProductDAO.productAlreadyAssocieated(item);
+    }  
+
+    public void removeUser(int userId) throws Exception {
+        userDAO.removeUser(userId);
     }
 
 }

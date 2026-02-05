@@ -45,15 +45,18 @@ public class ListProductsView extends Container {
         buttonRows.setBackColor(Color.WHITE);
         add(buttonRows, LEFT, BOTTOM, FILL, 60);
 
-        removeProductButton.setBackColor(Color.getRGB(156, 39, 176));
-        removeProductButton.setForeColor(Color.WHITE);
-        buttonRows.add(
-            removeProductButton,
-            LEFT + 10,
-            CENTER,
-            (buttonRows.getWidth() / 2) - 15,
-            45
-        );
+        if(user.getAdmin() == 1){
+            removeProductButton.setBackColor(Color.getRGB(156, 39, 176));
+            removeProductButton.setForeColor(Color.WHITE);
+            buttonRows.add(
+                removeProductButton,
+                LEFT + 10,
+                CENTER,
+                (buttonRows.getWidth() / 2) - 15,
+                45
+            );
+        }
+
 
         backButton.setBackColor(Color.getRGB(244, 67, 54));
         backButton.setForeColor(Color.WHITE);

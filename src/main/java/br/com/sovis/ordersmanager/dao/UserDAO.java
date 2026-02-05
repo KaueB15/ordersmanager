@@ -75,4 +75,15 @@ public class UserDAO {
         return users;
     }
 
+    public void removeUser(int userId) throws Exception {
+
+        PreparedStatement ps = connection.prepareStatement("DELETE FROM users WHERE id = ?");
+
+        ps.setInt(1, userId);
+
+        ps.executeUpdate();
+        ps.close();
+
+    }
+
 }

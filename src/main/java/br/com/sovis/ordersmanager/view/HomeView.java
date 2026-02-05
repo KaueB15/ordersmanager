@@ -62,7 +62,7 @@ public class HomeView extends Container {
         productsButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListProductsView(user)));
         ordersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListOrderView(user)));
         exitButton.addPressListener(event -> MainWindow.getMainWindow().swap(new LoginView()));
-        usersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new UsersView(user)));
+        usersButton.addPressListener(event -> MainWindow.getMainWindow().swap(new ListUserView(user)));
 
         addPenListener(new PenListener() {
             @Override

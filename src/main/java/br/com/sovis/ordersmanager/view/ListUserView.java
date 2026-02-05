@@ -1,15 +1,18 @@
 package br.com.sovis.ordersmanager.view;
 
-import br.com.sovis.ordersmanager.controller.CustomerController;
-import br.com.sovis.ordersmanager.model.Customer;
+import br.com.sovis.ordersmanager.controller.UserController;
 import br.com.sovis.ordersmanager.model.User;
-import br.com.sovis.ordersmanager.view.items.CustomerItem;
-import totalcross.ui.*;
+import br.com.sovis.ordersmanager.view.items.UserItem;
+import totalcross.ui.Button;
+import totalcross.ui.Container;
+import totalcross.ui.Label;
+import totalcross.ui.ListContainer;
+import totalcross.ui.MainWindow;
+import totalcross.ui.Toast;
 import totalcross.ui.gfx.Color;
 
-public class ListCustomersView extends Container {
-
-    private Label mainLabel = new Label("Clientes");
+public class ListUserView extends Container {
+    private Label mainLabel = new Label("Usuários");
 
     private Container buttonRows = new Container();
 
@@ -17,13 +20,13 @@ public class ListCustomersView extends Container {
 
     private Button backButton = new Button("Voltar");
     private Button removeCustomerButton = new Button("Remover");
-    private Button addCustomerButton = new Button("+");
+    private Button addUserButton = new Button("+");
 
-    private CustomerController customerController = new CustomerController();
-    private Customer[] customers;
+    private UserController userController = new UserController();
+    private User[] users;
     private User user;
 
-    public ListCustomersView(User user) {
+    public ListUserView(User user) {
         this.user = user;
     }
 
@@ -38,7 +41,7 @@ public class ListCustomersView extends Container {
 
         list = new ListContainer();
         add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 130);
-        loadCustomers();
+        loadUsers();
 
         buttonRows.setBackColor(Color.WHITE);
         add(buttonRows, LEFT, BOTTOM, FILL, 60);
@@ -60,10 +63,10 @@ public class ListCustomersView extends Container {
         buttonRows.add(backButton, AFTER + 10, SAME, (buttonRows.getWidth() / 2) - 15, 45);
 
         if(user.getAdmin() == 1) {
-            addCustomerButton.setBackColor(Color.getRGB(46, 204, 113));
-            addCustomerButton.setForeColor(Color.WHITE);
-            addCustomerButton.setFont(addCustomerButton.getFont().adjustedBy(10));
-            add(addCustomerButton, RIGHT - 20, BOTTOM - 60, 60, 60);
+            addUserButton.setBackColor(Color.getRGB(46, 204, 113));
+            addUserButton.setForeColor(Color.WHITE);
+            addUserButton.setFont(addUserButton.getFont().adjustedBy(10));
+            add(addUserButton, RIGHT - 20, BOTTOM - 60, 60, 60);
         }
 
 
@@ -72,28 +75,30 @@ public class ListCustomersView extends Container {
         );
 
         removeCustomerButton.addPressListener(e ->
-            removeCustomer()
+            removeUser()
         );
 
-        addCustomerButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new CustomerView(user))
+        addUserButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new UsersView(user))
         );
     }
 
 
-    private void loadCustomers() {
+    private void loadUsers() {
         try {
-            customers = customerController.findAll();
+            users = userController.findAll();
             list.removeAll();
-            for (Customer c : customers) {
-                list.addContainer(new CustomerItem(c));
+            for (User u : users) {
+                if(!u.getEmail().equals("admin")) {
+                    list.addContainer(new UserItem(u));
+                }
             }
         } catch (Exception e) {
             Toast.show("Erro ao carregar clientes", 2000);
         }
     }
 
-    private void removeCustomer() {
+    private void removeUser() {
 
         int index = list.getSelectedIndex();
 
@@ -103,9 +108,9 @@ public class ListCustomersView extends Container {
         }
 
         try {
-            customerController.removerCustomer(customers[index].getId());
+            userController.removeUser(users[index].getId());
             Toast.show("Cliente removido", 2000);
-            MainWindow.getMainWindow().swap(new ListCustomersView(user));
+            MainWindow.getMainWindow().swap(new ListUserView(user));
         } catch (Exception e) {
             Toast.show("Falha ao remover cliente", 2000);
         }
