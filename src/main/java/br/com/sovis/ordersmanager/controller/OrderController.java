@@ -2,6 +2,7 @@ package br.com.sovis.ordersmanager.controller;
 
 import br.com.sovis.ordersmanager.dao.OrderDAO;
 import br.com.sovis.ordersmanager.dao.OrderProductDAO;
+import br.com.sovis.ordersmanager.dto.OrderLoadingDTO;
 import br.com.sovis.ordersmanager.model.Orders;
 import br.com.sovis.ordersmanager.model.OrdersProduct;
 import br.com.sovis.ordersmanager.model.ProductItem;
@@ -32,7 +33,7 @@ public class OrderController {
         orderDAO.updateTotal(orderId, total);
     }
 
-    public Orders[] findAll() throws Exception {
+    public OrderLoadingDTO[] findAll() throws Exception {
         return orderDAO.findAll();
     }
 

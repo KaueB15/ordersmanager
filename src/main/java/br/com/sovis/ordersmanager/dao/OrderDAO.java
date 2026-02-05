@@ -3,6 +3,7 @@ package br.com.sovis.ordersmanager.dao;
 import java.sql.SQLException;
 
 import br.com.sovis.ordersmanager.db.Database;
+import br.com.sovis.ordersmanager.dto.OrderLoadingDTO;
 import br.com.sovis.ordersmanager.model.Orders;
 import totalcross.sql.Connection;
 import totalcross.sql.PreparedStatement;
@@ -87,7 +88,7 @@ public class OrderDAO {
 
     }
 
-    public Orders[] findAll() throws Exception {
+    public OrderLoadingDTO[] findAll() throws Exception {
 
         String sql =
             "SELECT o.id, o.id_user, o.order_date, o.total_price, o.status, c.name AS customer_name " +
@@ -102,12 +103,12 @@ public class OrderDAO {
 
         while (rs.next()) {
 
-            Orders order = new Orders();
+            OrderLoadingDTO order = new OrderLoadingDTO();
             order.setId(rs.getInt("id"));
             order.setOrderDate(rs.getString("order_date"));
             order.setTotalValue(rs.getDouble("total_price"));
             order.setStatus(rs.getString("status"));
-            order.setStatus(order.getStatus() + " - " + rs.getString("customer_name"));
+            order.setCustomerName(rs.getString("customer_name"));
             order.setUserId(rs.getInt("id_user"));
             list.addElement(order);
         }
@@ -115,7 +116,7 @@ public class OrderDAO {
         rs.close();
         st.close();
 
-        Orders[] orders = new Orders[list.size()];
+        OrderLoadingDTO[] orders = new OrderLoadingDTO[list.size()];
         list.copyInto(orders);
 
         return orders;

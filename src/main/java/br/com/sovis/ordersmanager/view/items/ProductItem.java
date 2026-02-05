@@ -21,7 +21,7 @@ public class ProductItem extends Container {
         Label label = new Label(
             + product.getId() +
             " | " + product.getName() +
-            " | " + product.getPrice()
+            " | R$ " + product.getPrice()
         );
 
         label.setForeColor(Color.BLACK);

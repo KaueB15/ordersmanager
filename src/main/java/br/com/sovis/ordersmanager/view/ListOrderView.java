@@ -1,11 +1,12 @@
 package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.controller.OrderController;
-import br.com.sovis.ordersmanager.model.Orders;
+import br.com.sovis.ordersmanager.dto.OrderLoadingDTO;
 import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.items.OrderItem;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
+import totalcross.ui.Edit;
 import totalcross.ui.Label;
 import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
@@ -18,14 +19,17 @@ public class ListOrderView extends Container {
     private ListContainer list;
     private Container buttonRows = new Container();
     private Container buttonRowsBottom = new Container();
+    private Container filterRow = new Container();
+    private Edit filterEdit = new Edit();
 
+    private Button filterButton = new Button("Filtrar");
     private Button backButton = new Button("Voltar");
     private Button cancelOrderButton = new Button("Cancelar");
     private Button closeOrderButton = new Button("Fechar");
     private Button infoButton = new Button("Produtos");
 
     private OrderController orderController = new OrderController();
-    private Orders[] orders;
+    private OrderLoadingDTO[] orders;
     private User user;
 
     public ListOrderView(User user) {
@@ -41,6 +45,11 @@ public class ListOrderView extends Container {
         mainLabel.setFont(mainLabel.getFont().adjustedBy(6));
         add(mainLabel, CENTER, TOP + 20);
 
+        add(filterRow, LEFT+20, AFTER + 10, FILL - 40, 60);
+        filterRow.add(filterEdit, LEFT, TOP, (filterRow.getWidth() * 70) / 100, FILL);
+        filterButton.setBackColor(Color.getRGB(156, 39, 176));
+        filterButton.setForeColor(Color.WHITE);
+        filterRow.add(filterButton, AFTER + 5, SAME, FILL, FILL);
 
         list = new ListContainer();
         add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 200);
@@ -103,6 +112,10 @@ public class ListOrderView extends Container {
         addButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new OrderView(user))
         );
+
+        filterButton.addPressListener(e -> {
+            applyFilter();
+        });
     }
 
     private void loadOrders() {
@@ -152,5 +165,20 @@ public class ListOrderView extends Container {
         } catch (Exception e) {
             Toast.show("Falha ao fechar pedido", 2000);
         }
+    }
+    
+    private void applyFilter() {
+        String filter = filterEdit.getText().trim().toLowerCase();
+
+        list.removeAllContainers();
+        
+        for(int i = 0; i < orders.length; i++) {
+            OrderLoadingDTO order = orders[i];
+
+            if(filter.length() == 0 || order.getCustomerName().toLowerCase().contains(filter)) {
+                list.addContainer(new OrderItem(order));
+            }
+        }
+
     }
 }
