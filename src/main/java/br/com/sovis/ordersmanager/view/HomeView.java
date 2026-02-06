@@ -1,7 +1,10 @@
 package br.com.sovis.ordersmanager.view;
 
+import br.com.sovis.ordersmanager.controller.OrderController;
+import br.com.sovis.ordersmanager.dto.OrderLoadingDTO;
 import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.forms.LoginView;
+import br.com.sovis.ordersmanager.view.items.OrderItem;
 import br.com.sovis.ordersmanager.view.list.ListCustomersView;
 import br.com.sovis.ordersmanager.view.list.ListOrderView;
 import br.com.sovis.ordersmanager.view.list.ListProductsView;
@@ -9,7 +12,9 @@ import br.com.sovis.ordersmanager.view.list.ListUserView;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Label;
+import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
+import totalcross.ui.Toast;
 import totalcross.ui.event.DragEvent;
 import totalcross.ui.event.PenEvent;
 import totalcross.ui.event.PenListener;
@@ -19,8 +24,10 @@ import totalcross.ui.font.Font;
 public class HomeView extends Container {
 
     private Label titleLabel = new Label("Bem-vindo!");
+    
+    private ListContainer list;
+    
     private Button menuButton = new Button("☰");
-
     private Button customerButton = new Button("Clientes");
     private Button productsButton = new Button("Produtos");
     private Button ordersButton = new Button("Pedidos");
@@ -29,6 +36,8 @@ public class HomeView extends Container {
 
     private Container sideMenu = new Container();
     private boolean menuVisible = false;
+    private OrderController orderController = new OrderController();
+    private OrderLoadingDTO[] orders;
     private User user;
 
     public HomeView(User user) {
@@ -50,6 +59,10 @@ public class HomeView extends Container {
         titleLabel.setForeColor(Color.getRGB(39, 174, 96));
         titleLabel.setFont(Font.getFont(true, 28));
         add(titleLabel, CENTER, TOP + 50);
+
+        list = new ListContainer();
+        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 50);
+        loadOrders();
 
         sideMenu.setBackColor(Color.getRGB(39, 174, 96));
         sideMenu.setVisible(false);
@@ -105,5 +118,22 @@ public class HomeView extends Container {
         button.setForeColor(Color.WHITE);
         button.setFont(Font.getFont(true, 16));
         sideMenu.add(button, LEFT + 20, AFTER + 20, FILL - 40, 40);
+    }
+
+    private void loadOrders() {
+        try {
+            orders = orderController.findAll();
+            list.removeAll();
+            for (int i = 0; i < orders.length; i++) {
+                if(user.getAdmin() == 1 ){
+                    list.addContainer(new OrderItem(orders[i]));
+                } else if (orders[i].getUserId() == user.getId()) {
+                    list.addContainer(new OrderItem(orders[i]));
+                }
+            }
+        } catch (Exception e) {
+            Toast.show("Erro ao carregar pedidos", 2000);
+            System.err.println(e);
+        }
     }
 }

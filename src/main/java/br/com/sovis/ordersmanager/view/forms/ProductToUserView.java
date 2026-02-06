@@ -5,7 +5,6 @@ import br.com.sovis.ordersmanager.controller.UserController;
 import br.com.sovis.ordersmanager.model.Product;
 import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.model.UsersProduct;
-import br.com.sovis.ordersmanager.view.list.ListOrderView;
 import br.com.sovis.ordersmanager.view.list.ListProductsView;
 import totalcross.ui.Button;
 import totalcross.ui.ComboBox;
@@ -117,7 +116,7 @@ public class ProductToUserView extends Container {
         addProductButton.addPressListener(e -> addProduct());
         saveButton.addPressListener(e -> saveAssociation());
         cancelButton.addPressListener(e ->
-            MainWindow.getMainWindow().swap(new ListOrderView(user))
+            MainWindow.getMainWindow().swap(new ListProductsView(user))
         );
     }
 
