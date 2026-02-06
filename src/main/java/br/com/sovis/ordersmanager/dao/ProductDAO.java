@@ -72,4 +72,24 @@ public class ProductDAO {
 
     }
 
+    public boolean productAlreadyUsed(int productId) throws Exception {
+        
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM product WHERE id = ?");
+
+        ps.setInt(1, productId);
+
+        ResultSet rs = ps.executeQuery();
+        boolean used;
+        if(rs.next()) {
+            used = true;
+        } else {
+            used = false;
+        }
+
+        ps.close();
+        rs.close();
+
+        return used;
+    }
+
 }

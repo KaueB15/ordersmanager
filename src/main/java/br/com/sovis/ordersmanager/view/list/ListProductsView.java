@@ -134,6 +134,10 @@ public class ListProductsView extends Container {
 
         try {
             int productId = products[selectedIndex].getId();
+            if(productController.productAlreadyUsed(productId)) {
+                Toast.show("Produto sendo utilizado", 2000);
+                return;
+            }
             productController.removeProduct(productId);
             MainWindow.getMainWindow().swap(new ListProductsView(user));
         } catch (Exception e) {

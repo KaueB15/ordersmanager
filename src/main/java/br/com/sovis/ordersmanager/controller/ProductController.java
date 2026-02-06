@@ -37,4 +37,8 @@ public class ProductController {
         return usersProductDAO.findByUserId(userId);
     }
 
+    public boolean productAlreadyUsed(int productId) throws Exception {
+        return productDAO.productAlreadyUsed(productId);
+    }
+
 }

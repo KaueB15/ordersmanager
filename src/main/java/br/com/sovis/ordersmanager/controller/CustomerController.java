@@ -25,20 +25,20 @@ public class CustomerController {
     }
 
     public Customer[] findAll() throws Exception {
-
         return customerDAO.findAll();
 
     }
     
     public String[] getCustomersNames() throws Exception {
-
         return customerDAO.getCustomersNames();
     }
 
     public void removerCustomer(int customerId) throws Exception {
-
         customerDAO.removeCustomer(customerId);
+    }
 
+    public boolean customerAlreadyUsed(int customerId) throws Exception {
+        return customerDAO.customerAlreadyUsed(customerId);
     }
     
 }

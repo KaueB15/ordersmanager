@@ -152,8 +152,9 @@ public class ProductToUserView extends Container {
                 return;
             }
             items[itemCount++] = item;
-    
             productsBox.setSelectedIndex(0);
+
+            Toast.show("Produto adicionado", 2000);
         } catch (Exception e) {
             Toast.show("Erro ao adicionar produto", 2000);
             System.err.println(e);

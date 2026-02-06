@@ -82,4 +82,24 @@ public class CustomerDAO {
 
     }
 
+    public boolean customerAlreadyUsed(int customerId) throws Exception {
+
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM orders WHERE id_customer = ?");
+
+        ps.setInt(1, customerId);
+
+        ResultSet rs = ps.executeQuery();
+        boolean used;
+        if(rs.next()) {
+            used = true;
+        } else {
+            used = false;
+        }
+
+        ps.close();
+        rs.close();
+
+        return used;
+    }
+
 }

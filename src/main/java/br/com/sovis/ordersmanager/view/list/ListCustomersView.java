@@ -104,7 +104,12 @@ public class ListCustomersView extends Container {
             return;
         }
 
+        
         try {
+            if(customerController.customerAlreadyUsed(customers[index].getId())) {
+                Toast.show("Cliente sendo utilizado", 2000);
+                return;
+            }
             customerController.removerCustomer(customers[index].getId());
             Toast.show("Cliente removido", 2000);
             MainWindow.getMainWindow().swap(new ListCustomersView(user));
