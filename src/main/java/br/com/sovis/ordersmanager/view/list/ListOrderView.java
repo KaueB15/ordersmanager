@@ -1,8 +1,10 @@
-package br.com.sovis.ordersmanager.view;
+package br.com.sovis.ordersmanager.view.list;
 
 import br.com.sovis.ordersmanager.controller.OrderController;
 import br.com.sovis.ordersmanager.dto.OrderLoadingDTO;
 import br.com.sovis.ordersmanager.model.User;
+import br.com.sovis.ordersmanager.view.HomeView;
+import br.com.sovis.ordersmanager.view.forms.OrderView;
 import br.com.sovis.ordersmanager.view.items.OrderItem;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
@@ -176,7 +178,11 @@ public class ListOrderView extends Container {
             OrderLoadingDTO order = orders[i];
 
             if(filter.length() == 0 || order.getCustomerName().toLowerCase().contains(filter)) {
-                list.addContainer(new OrderItem(order));
+                if(user.getAdmin() == 1 ){
+                    list.addContainer(new OrderItem(orders[i]));
+                } else if (orders[i].getUserId() == user.getId()) {
+                    list.addContainer(new OrderItem(orders[i]));
+                }
             }
         }
 

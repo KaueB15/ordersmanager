@@ -1,4 +1,4 @@
-package br.com.sovis.ordersmanager.view;
+package br.com.sovis.ordersmanager.view.forms;
 
 import br.com.sovis.ordersmanager.controller.CustomerController;
 import br.com.sovis.ordersmanager.controller.OrderController;
@@ -8,6 +8,7 @@ import br.com.sovis.ordersmanager.model.Orders;
 import br.com.sovis.ordersmanager.model.OrdersProduct;
 import br.com.sovis.ordersmanager.model.Product;
 import br.com.sovis.ordersmanager.model.User;
+import br.com.sovis.ordersmanager.view.list.ListOrderView;
 import totalcross.sys.Time;
 import totalcross.ui.Button;
 import totalcross.ui.ComboBox;

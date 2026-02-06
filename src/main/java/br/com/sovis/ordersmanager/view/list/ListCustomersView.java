@@ -1,8 +1,10 @@
-package br.com.sovis.ordersmanager.view;
+package br.com.sovis.ordersmanager.view.list;
 
 import br.com.sovis.ordersmanager.controller.CustomerController;
 import br.com.sovis.ordersmanager.model.Customer;
 import br.com.sovis.ordersmanager.model.User;
+import br.com.sovis.ordersmanager.view.HomeView;
+import br.com.sovis.ordersmanager.view.forms.CustomerView;
 import br.com.sovis.ordersmanager.view.items.CustomerItem;
 import totalcross.ui.*;
 import totalcross.ui.gfx.Color;

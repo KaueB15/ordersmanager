@@ -1,4 +1,4 @@
-package br.com.sovis.ordersmanager.view;
+package br.com.sovis.ordersmanager.view.list;
 
 import br.com.sovis.ordersmanager.controller.ProductController;
 import br.com.sovis.ordersmanager.controller.UserController;

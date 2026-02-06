@@ -1,6 +1,11 @@
 package br.com.sovis.ordersmanager.view;
 
 import br.com.sovis.ordersmanager.model.User;
+import br.com.sovis.ordersmanager.view.forms.LoginView;
+import br.com.sovis.ordersmanager.view.list.ListCustomersView;
+import br.com.sovis.ordersmanager.view.list.ListOrderView;
+import br.com.sovis.ordersmanager.view.list.ListProductsView;
+import br.com.sovis.ordersmanager.view.list.ListUserView;
 import totalcross.ui.Button;
 import totalcross.ui.Container;
 import totalcross.ui.Label;

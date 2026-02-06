@@ -1,7 +1,7 @@
 package br.com.sovis.ordersmanager;
 import totalcross.ui.MainWindow;
 import br.com.sovis.ordersmanager.db.Database;
-import br.com.sovis.ordersmanager.view.LoginView;
+import br.com.sovis.ordersmanager.view.forms.LoginView;
 import totalcross.sys.Settings;
 public class ordersmanager extends MainWindow {
     
