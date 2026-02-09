@@ -1,18 +1,22 @@
 package br.com.sovis.ordersmanager.controller;
 
 import br.com.sovis.ordersmanager.dao.UserDAO;
+import br.com.sovis.ordersmanager.dao.UsersCustomerDAO;
 import br.com.sovis.ordersmanager.dao.UsersProductDAO;
 import br.com.sovis.ordersmanager.model.User;
+import br.com.sovis.ordersmanager.model.UsersCustomer;
 import br.com.sovis.ordersmanager.model.UsersProduct;
 
 public class UserController {
 
     private UserDAO userDAO;
     private UsersProductDAO usersProductDAO;
+    private UsersCustomerDAO usersCustomerDAO;
 
     public UserController() {
         userDAO = new UserDAO();
         usersProductDAO = new UsersProductDAO();
+        usersCustomerDAO = new UsersCustomerDAO();
     }
 
     public User login(String email, String password) {
@@ -54,6 +58,20 @@ public class UserController {
 
     public void deleteProductFromUser(int userId, int productId) throws Exception {
         usersProductDAO.deleteProductFromUser(userId, productId);
+    }
+
+    public void createUserCustomerAssociation(UsersCustomer[] item) throws Exception {
+        for(int i = 0; i < item.length; i++) {
+            usersCustomerDAO.insert(item[i]);
+        }
+    }
+
+    public boolean customerAlreadyAssocieated(UsersCustomer item) throws Exception {
+        return usersCustomerDAO.customerAlreadyAssocieated(item);
+    }
+
+    public void deleteCustomerFromUser(int userId, int customerId) throws Exception {
+        usersCustomerDAO.deleteCustomerFromUser(userId, customerId);
     }
 
 }

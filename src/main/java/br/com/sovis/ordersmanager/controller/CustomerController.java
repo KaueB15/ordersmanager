@@ -1,15 +1,18 @@
 package br.com.sovis.ordersmanager.controller;
 
 import br.com.sovis.ordersmanager.dao.CustomerDAO;
+import br.com.sovis.ordersmanager.dao.UsersCustomerDAO;
 import br.com.sovis.ordersmanager.model.Customer;
 import totalcross.sys.Time;
 
 public class CustomerController {
 
     private CustomerDAO customerDAO;
+    private UsersCustomerDAO usersCustomerDAO;
 
     public CustomerController() {
         this.customerDAO = new CustomerDAO();
+        this.usersCustomerDAO = new UsersCustomerDAO();
     }
 
     public void createCustomer(String name, String email, String phone) throws Exception {
@@ -39,6 +42,10 @@ public class CustomerController {
 
     public boolean customerAlreadyUsed(int customerId) throws Exception {
         return customerDAO.customerAlreadyUsed(customerId);
+    }
+
+    public Customer[] findByUserId(int userId) throws Exception {
+        return usersCustomerDAO.findByUserId(userId);
     }
     
 }

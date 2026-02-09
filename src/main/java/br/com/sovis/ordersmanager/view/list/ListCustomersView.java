@@ -4,6 +4,7 @@ import br.com.sovis.ordersmanager.controller.CustomerController;
 import br.com.sovis.ordersmanager.model.Customer;
 import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.HomeView;
+import br.com.sovis.ordersmanager.view.forms.CustomerToUserView;
 import br.com.sovis.ordersmanager.view.forms.CustomerView;
 import br.com.sovis.ordersmanager.view.items.CustomerItem;
 import totalcross.ui.*;
@@ -20,6 +21,7 @@ public class ListCustomersView extends Container {
     private Button backButton = new Button("Voltar");
     private Button removeCustomerButton = new Button("Remover");
     private Button addCustomerButton = new Button("+");
+    private Button assButton = new Button("=");
 
     private CustomerController customerController = new CustomerController();
     private Customer[] customers;
@@ -66,12 +68,20 @@ public class ListCustomersView extends Container {
             addCustomerButton.setForeColor(Color.WHITE);
             addCustomerButton.setFont(addCustomerButton.getFont().adjustedBy(10));
             add(addCustomerButton, RIGHT - 20, BOTTOM - 60, 60, 60);
-        }
 
+            assButton.setBackColor(Color.getRGB(46, 204, 113));
+            assButton.setForeColor(Color.WHITE);
+            assButton.setFont(assButton.getFont().adjustedBy(10));
+            add(assButton, RIGHT - 80, BOTTOM - 60, 60, 60);
+        }
 
         backButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new HomeView(user))
         );
+
+        assButton.addPressListener(e -> {
+            MainWindow.getMainWindow().swap(new CustomerToUserView(user));
+        });
 
         removeCustomerButton.addPressListener(e ->
             removeCustomer()
@@ -85,8 +95,14 @@ public class ListCustomersView extends Container {
 
     private void loadCustomers() {
         try {
-            customers = customerController.findAll();
+            if(user.getAdmin() == 1) {
+                customers = customerController.findAll();
+            } else {
+                customers = customerController.findByUserId(user.getId());
+            }
+
             list.removeAll();
+            
             for (Customer c : customers) {
                 list.addContainer(new CustomerItem(c));
             }

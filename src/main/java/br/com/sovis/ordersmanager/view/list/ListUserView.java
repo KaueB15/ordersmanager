@@ -23,7 +23,8 @@ public class ListUserView extends Container {
     private Button backButton = new Button("Voltar");
     private Button removeCustomerButton = new Button("Remover");
     private Button addUserButton = new Button("+");
-    private Button assButton = new Button("=");
+    private Button assProductButton = new Button("=");
+    private Button assCustomerButton = new Button("=");
 
     private UserController userController = new UserController();
     private User[] users;
@@ -70,10 +71,15 @@ public class ListUserView extends Container {
         addUserButton.setFont(addUserButton.getFont().adjustedBy(10));
         add(addUserButton, RIGHT - 20, BOTTOM - 60, 60, 60);
 
-        assButton.setBackColor(Color.getRGB(46, 204, 113));
-        assButton.setForeColor(Color.WHITE);
-        assButton.setFont(assButton.getFont().adjustedBy(10));
-        add(assButton, RIGHT - 80, BOTTOM - 60, 60, 60);
+        assProductButton.setBackColor(Color.getRGB(46, 204, 113));
+        assProductButton.setForeColor(Color.WHITE);
+        assProductButton.setFont(assProductButton.getFont().adjustedBy(10));
+        add(assProductButton, RIGHT - 80, BOTTOM - 60, 60, 60);
+
+        assCustomerButton.setBackColor(Color.getRGB(46, 204, 113));
+        assCustomerButton.setForeColor(Color.WHITE);
+        assCustomerButton.setFont(assCustomerButton.getFont().adjustedBy(10));
+        add(assCustomerButton, RIGHT - 140, BOTTOM - 60, 60, 60);
 
 
         backButton.addPressListener(e ->
@@ -84,11 +90,19 @@ public class ListUserView extends Container {
             removeUser()
         );
 
-        assButton.addPressListener(e -> {
+        assProductButton.addPressListener(e -> {
             if(users[list.getSelectedIndex()].getEmail().equals("admin")) {
                 Toast.show("Admin tem acesso a todos produtos", 2000);
             } else {
                 MainWindow.getMainWindow().swap(new ProductUserInfo(user, users[list.getSelectedIndex()].getId()));
+            }
+        });
+        
+        assCustomerButton.addPressListener(e -> {
+            if(users[list.getSelectedIndex()].getEmail().equals("admin")) {
+                Toast.show("Admin tem acesso a todos clientes", 2000);
+            } else {
+                MainWindow.getMainWindow().swap(new CustomerUserInfoView(user, users[list.getSelectedIndex()].getId()));
             }
         });
 

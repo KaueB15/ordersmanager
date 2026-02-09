@@ -76,6 +76,15 @@ public class Database {
             "FOREIGN KEY (id_user) REFERENCES users(id)," +
             "FOREIGN KEY (id_product) REFERENCES product(id))"
         );
+
+        st.execute(
+            "CREATE TABLE IF NOT EXISTS customer_user (" +
+            "id INTEGER PRIMARY KEY AUTOINCREMENT," +
+            "id_user INTEGER NOT NULL," +
+            "id_customer INTEGER NOT NULL," +
+            "FOREIGN KEY (id_user) REFERENCES users(id)," +
+            "FOREIGN KEY (id_customer) REFERENCES customer(id))"
+        );
     }
 
     public static void insertAdminUser() throws Exception {

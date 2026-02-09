@@ -77,7 +77,12 @@ public class OrderView extends Container {
             customerLabel.setForeColor(Color.getRGB(44, 62, 80));
             add(customerLabel, LEFT + 40, AFTER + 35);
 
-            customers = customerController.findAll();
+            if(user.getAdmin() == 1) {
+                customers = customerController.findAll();
+            } else {
+                customers = customerController.findByUserId(user.getId());
+            }
+
             String[] names = new String[customers.length];
 
             for (int i = 0; i < customers.length; i++) {
@@ -93,6 +98,7 @@ public class OrderView extends Container {
 
         } catch (Exception e) {
             Toast.show("Erro ao carregar clientes", 2000);
+            System.out.println(e);
         }
 
         try {
