@@ -53,8 +53,8 @@ public class Database {
             "total_price REAL," +
             "order_date TEXT," +
             "status TEXT," +
-            "FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE RESTRICT," +
-            "FOREIGN KEY (id_customer) REFERENCES customer(id) ON DELETE RESTRICT)"
+            "FOREIGN KEY (id_user) REFERENCES users(id)," +
+            "FOREIGN KEY (id_customer) REFERENCES customer(id))"
         );
         
         st.execute(
@@ -64,8 +64,8 @@ public class Database {
             "id_product INTEGER NOT NULL," +
             "price REAL," +
             "quantity INTEGER," +
-            "FOREIGN KEY (id_order) REFERENCES orders(id) ON DELETE RESTRICT," +
-            "FOREIGN KEY (id_product) REFERENCES product(id) ON DELETE RESTRICT)"
+            "FOREIGN KEY (id_order) REFERENCES orders(id)," +
+            "FOREIGN KEY (id_product) REFERENCES product(id))"
         );
 
         st.execute(
@@ -73,8 +73,8 @@ public class Database {
             "id INTEGER PRIMARY KEY AUTOINCREMENT," +
             "id_user INTEGER NOT NULL," +
             "id_product INTEGER NOT NULL," +
-            "FOREIGN KEY (id_user) REFERENCES users(id) ON DELETE RESTRICT," +
-            "FOREIGN KEY (id_product) REFERENCES product(id) ON DELETE RESTRICT)"
+            "FOREIGN KEY (id_user) REFERENCES users(id)," +
+            "FOREIGN KEY (id_product) REFERENCES product(id))"
         );
     }
 

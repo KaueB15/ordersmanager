@@ -1,15 +1,21 @@
 package br.com.sovis.ordersmanager.view.items;
 
 import br.com.sovis.ordersmanager.model.Product;
-import totalcross.ui.Container;
 import totalcross.ui.Label;
+import totalcross.ui.ScrollContainer;
 import totalcross.ui.gfx.Color;
 
-public class ProductItem extends Container {
+public class ProductItem extends ScrollContainer {
+
+    private Label productName;
+    private Label productId;
+    private Label productDescription;
+    private Label productPrice;
 
     private Product product;
 
     public ProductItem(Product product) {
+        super(false);
         this.product = product;
     }
 
@@ -18,15 +24,31 @@ public class ProductItem extends Container {
 
         setBackColor(Color.WHITE);
 
-        Label label = new Label(
-            + product.getId() +
-            " | " + product.getName() +
-            " | R$ " + product.getPrice()
-        );
+        productId = new Label("" + product.getId());
+        productId.setForeColor(Color.BLACK);
+        add(productId, LEFT + 10, TOP, FILL, PREFERRED);
 
-        label.setForeColor(Color.BLACK);
+        productName = new Label(product.getName());
+        productName.setForeColor(Color.BLACK);
+        add(productName, LEFT + 10, AFTER + 5);
 
-        add(label, LEFT + 10, CENTER);
+        productDescription = new Label(product.getDescription());
+        productDescription.setForeColor(Color.BLACK);
+        add(productDescription, LEFT + 10, AFTER + 5);
+
+        productPrice = new Label("R$ " + String.format("%.2f", product.getPrice()));
+        productPrice.setForeColor(Color.BLACK);
+        add(productPrice, LEFT + 10, AFTER + 5);
+
+        // Label label = new Label(
+        //     + product.getId() +
+        //     " | " + product.getName() +
+        //     " | R$ " + product.getPrice()
+        // );
+
+        // label.setForeColor(Color.BLACK);
+
+        // add(label, LEFT + 10, CENTER);
     }
 
     public Product getproduct() {

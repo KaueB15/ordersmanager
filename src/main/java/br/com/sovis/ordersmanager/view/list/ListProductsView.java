@@ -120,6 +120,7 @@ public class ListProductsView extends Container {
 
         } catch (Exception e) {
             Toast.show("Erro ao carregar produtos", 2000);
+            System.out.println(e);
         }
     }
 
@@ -142,6 +143,7 @@ public class ListProductsView extends Container {
             MainWindow.getMainWindow().swap(new ListProductsView(user));
         } catch (Exception e) {
             Toast.show("Falha ao remover produto", 2000);
+            System.out.println(e);
         }
     }
 }
