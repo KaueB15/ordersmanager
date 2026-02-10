@@ -40,7 +40,7 @@ public class OrderProductDAO {
     public ProductItem[] findByOrderId(int orderId) throws Exception {
 
         String sql =
-            "SELECT po.id_product ,p.name, po.price, po.quantity " +
+            "SELECT po.id_product ,p.name, po.price, po.quantity, p.description " +
             "FROM product_order po " +
             "JOIN product p ON p.id = po.id_product " +
             "WHERE po.id_order = ?";
@@ -60,6 +60,7 @@ public class OrderProductDAO {
             item.setProductName(rs.getString("name"));
             item.setPrice(rs.getDouble("price"));
             item.setQuantity(rs.getInt("quantity"));
+            item.setDescription(rs.getString("description"));
 
             items.addElement(item);
         }

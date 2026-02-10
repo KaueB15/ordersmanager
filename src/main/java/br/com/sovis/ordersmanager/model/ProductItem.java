@@ -6,6 +6,7 @@ public class ProductItem {
     private String productName;
     private double price;
     private int quantity;
+    private String description;
 
     public void setItemId(int itemId) {
         this.itemId = itemId;
@@ -37,6 +38,14 @@ public class ProductItem {
     
     public int getQuantity() {
         return quantity;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
 }

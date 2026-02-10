@@ -37,7 +37,7 @@ public class UsersProductDAO {
 
     public Product[] findByUserId(int userId) throws Exception {
         String sql =
-            "SELECT DISTINCT pu.id_product, p.name, p.price " +
+            "SELECT DISTINCT pu.id_product, p.name, p.price, p.description " +
             "FROM product_user pu " +
             "JOIN product p ON p.id = pu.id_product " +
             "WHERE pu.id_user = ?";
@@ -54,6 +54,7 @@ public class UsersProductDAO {
             Product item = new Product();
             item.setId(rs.getInt("id_product"));
             item.setName(rs.getString("name"));
+            item.setDescription(rs.getString("description"));
             item.setPrice(rs.getDouble("price"));
 
             items.addElement(item);

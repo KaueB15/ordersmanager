@@ -45,18 +45,6 @@ public class OrderItem extends ScrollContainer {
         row.add(orderPrice, LEFT, CENTER);
         row.add(orderStatus, RIGHT - 20, CENTER);
 
-        
-
-        // Label label = new Label(
-        //     "Pedido #" + order.getId() +
-        //     " | " + order.getStatus() + " - " + 
-        //     order.getCustomerName() +
-        //     " | Total: " + order.getTotalValue()
-        // );
-
-        // label.setForeColor(Color.BLACK);
-
-        // add(label, LEFT + 10, CENTER);
     }
 
     public OrderLoadingDTO getOrder() {

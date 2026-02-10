@@ -74,7 +74,7 @@ public class ProductDAO {
 
     public boolean productAlreadyUsed(int productId) throws Exception {
         
-        PreparedStatement ps = connection.prepareStatement("SELECT * FROM product WHERE id = ?");
+        PreparedStatement ps = connection.prepareStatement("SELECT * FROM product_order WHERE id = ?");
 
         ps.setInt(1, productId);
 

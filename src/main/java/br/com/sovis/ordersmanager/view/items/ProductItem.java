@@ -39,16 +39,6 @@ public class ProductItem extends ScrollContainer {
         productPrice = new Label("R$ " + String.format("%.2f", product.getPrice()));
         productPrice.setForeColor(Color.BLACK);
         add(productPrice, LEFT + 10, AFTER + 5);
-
-        // Label label = new Label(
-        //     + product.getId() +
-        //     " | " + product.getName() +
-        //     " | R$ " + product.getPrice()
-        // );
-
-        // label.setForeColor(Color.BLACK);
-
-        // add(label, LEFT + 10, CENTER);
     }
 
     public Product getproduct() {
