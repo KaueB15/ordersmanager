@@ -91,31 +91,51 @@ public class OrderProductDAO {
     public void addProductToOrder(int orderId, int productId, double price, int quantity) throws Exception {
 
         PreparedStatement check = connection.prepareStatement(
-            "SELECT quantity FROM product_order WHERE id_order = ? AND id_product = ?"
+            "SELECT quantity, price FROM product_order WHERE id_order = ? AND id_product = ?"
         );
+
+        PreparedStatement checkOrderValue = connection.prepareStatement(
+            "SELECT total_price FROM orders WHERE id = ?"
+        );
+
+        checkOrderValue.setInt(1, orderId);
 
         check.setInt(1, orderId);
         check.setInt(2, productId);
 
         ResultSet rs = check.executeQuery();
+        ResultSet rsOrder = checkOrderValue.executeQuery();
 
         if (rs.next()) {
-
+            
             int currentQty = rs.getInt("quantity");
+            double currentPrice = rs.getDouble("price");
+            double currentTotalOrderPrice = rsOrder.getDouble("total_price");
 
-            PreparedStatement update = connection.prepareStatement(
+            PreparedStatement updateProductOrder = connection.prepareStatement(
                 "UPDATE product_order SET quantity = ?, price = ? WHERE id_order = ? AND id_product = ?"
             );
 
-            update.setInt(1, currentQty + quantity);
-            update.setDouble(2, price);
-            update.setInt(3, orderId);
-            update.setInt(4, productId);
+            updateProductOrder.setInt(1, currentQty + quantity);
+            updateProductOrder.setDouble(2, currentPrice + price);
+            updateProductOrder.setInt(3, orderId);
+            updateProductOrder.setInt(4, productId);
+            
+            PreparedStatement updateOrder = connection.prepareStatement(
+                "UPDATE orders SET total_price = ? WHERE id = ?"
+            );
+            
+            updateOrder.setDouble(1, currentTotalOrderPrice + price);
+            updateOrder.setInt(2, orderId);
 
-            update.executeUpdate();
-            update.close();
+            updateProductOrder.executeUpdate();
+            updateProductOrder.close();
+            updateOrder.executeUpdate();
+            updateOrder.close();
 
         } else {
+
+            double currentTotalOrderPrice = rsOrder.getDouble("total_price");
 
             PreparedStatement insert = connection.prepareStatement(
                 "INSERT INTO product_order (id_order, id_product, price, quantity) VALUES (?, ?, ?, ?)"
@@ -125,6 +145,16 @@ public class OrderProductDAO {
             insert.setInt(2, productId);
             insert.setDouble(3, price);
             insert.setInt(4, quantity);
+
+            PreparedStatement updateOrder = connection.prepareStatement(
+                "UPDATE orders SET total_price = ? WHERE id = ?"
+            );
+            
+            updateOrder.setDouble(1, currentTotalOrderPrice + price);
+            updateOrder.setInt(2, orderId);
+
+            updateOrder.executeUpdate();
+            updateOrder.close();
 
             insert.executeUpdate();
             insert.close();
