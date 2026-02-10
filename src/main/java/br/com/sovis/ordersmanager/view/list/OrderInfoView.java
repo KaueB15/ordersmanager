@@ -12,6 +12,7 @@ import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.gfx.Color;
+import totalcross.ui.image.Image;
 
 public class OrderInfoView extends Container {
 
@@ -20,9 +21,8 @@ public class OrderInfoView extends Container {
 
     private Label mainLabel = new Label("Produtos do Pedido");
     private ListContainer list;
-    private Container bottomBar = new Container();
-    private Button backButton = new Button("Voltar");
-    private Button cancelProductButton = new Button("Retirar Produto");
+    private Button backButton;
+    private Button cancelProductButton;
     private Button addProductButton = new Button("+");
 
     private OrderController orderController = new OrderController();
@@ -44,24 +44,29 @@ public class OrderInfoView extends Container {
         add(mainLabel, CENTER, TOP + 20);
 
         list = new ListContainer();
-        add(list, LEFT + 20, AFTER + 15, FILL - 40, FILL - 130);
+        add(list, LEFT + 20, AFTER + 15, FILL - 40, FILL - 80);
         loadProducts();
 
-        add(bottomBar, LEFT, BOTTOM, FILL, 70);
-        bottomBar.setBackColor(Color.getRGB(255, 255, 255));
+        
+        try {
+            cancelProductButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
+            cancelProductButton.setBackColor(Color.getRGB(156, 39, 176));
+            cancelProductButton.setForeColor(Color.WHITE);
+            add(cancelProductButton, RIGHT - 130, BOTTOM - 10, 60, 60);
 
-        cancelProductButton.setBackColor(Color.getRGB(39, 174, 96));
-        cancelProductButton.setForeColor(Color.WHITE);
-        bottomBar.add(cancelProductButton, LEFT + 10, CENTER, bottomBar.getWidth() / 2 - 15, 45);
+            addProductButton.setBackColor(Color.getRGB(39, 174, 96));
+            addProductButton.setForeColor(Color.WHITE);
+            addProductButton.setFont(addProductButton.getFont().adjustedBy(10));
+            add(addProductButton, RIGHT - 70, BOTTOM - 10, 60, 60);
+    
+            backButton = new Button(new Image("home.png").getScaledInstance(20, 20));
+            backButton.setBackColor(Color.getRGB(244, 67, 54));
+            backButton.setForeColor(Color.WHITE);
+            add(backButton, RIGHT - 10, BOTTOM - 10, 60, 60);
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
-        backButton.setBackColor(Color.getRGB(231, 76, 60));
-        backButton.setForeColor(Color.WHITE);
-        bottomBar.add(backButton, RIGHT - 10, CENTER, bottomBar.getWidth() / 2 - 15, 45);
-
-        add(addProductButton, RIGHT - 20, BOTTOM - 60, 56, 56);
-        addProductButton.setBackColor(Color.getRGB(39, 174, 96));
-        addProductButton.setForeColor(Color.WHITE);
-        addProductButton.setFont(addProductButton.getFont().adjustedBy(10));
 
         backButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new ListOrderView(user))

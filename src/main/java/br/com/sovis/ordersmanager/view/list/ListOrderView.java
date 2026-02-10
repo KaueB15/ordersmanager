@@ -14,21 +14,21 @@ import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.gfx.Color;
+import totalcross.ui.image.Image;
 
 public class ListOrderView extends Container {
 
     private Label mainLabel = new Label("Pedidos");
     private ListContainer list;
-    private Container buttonRows = new Container();
-    private Container buttonRowsBottom = new Container();
     private Container filterRow = new Container();
     private Edit filterEdit = new Edit();
 
-    private Button filterButton = new Button("Filtrar");
-    private Button backButton = new Button("Voltar");
-    private Button cancelOrderButton = new Button("Cancelar");
-    private Button closeOrderButton = new Button("Fechar");
-    private Button infoButton = new Button("Produtos");
+    private Button filterButton;
+    private Button addButton;
+    private Button backButton;
+    private Button cancelOrderButton;
+    private Button closeOrderButton;
+    private Button infoButton;
 
     private OrderController orderController = new OrderController();
     private OrderLoadingDTO[] orders;
@@ -49,40 +49,51 @@ public class ListOrderView extends Container {
 
         add(filterRow, LEFT+20, AFTER + 10, FILL - 40, 60);
         filterRow.add(filterEdit, LEFT, TOP, (filterRow.getWidth() * 70) / 100, FILL);
-        filterButton.setBackColor(Color.getRGB(156, 39, 176));
-        filterButton.setForeColor(Color.WHITE);
-        filterRow.add(filterButton, AFTER + 5, SAME, FILL, FILL);
+        try {
+            filterButton = new Button(new Image("search.png").getScaledInstance(20, 20));
+            filterButton.setBackColor(Color.getRGB(156, 39, 176));
+            filterButton.setForeColor(Color.WHITE);
+            filterRow.add(filterButton, AFTER + 5, SAME, FILL, FILL);
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
         list = new ListContainer();
-        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 200);
+        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 100);
         loadOrders();
 
-        buttonRows.setBackColor(Color.WHITE);
-        add(buttonRows, LEFT, BOTTOM - 50, FILL, 70);
-        buttonRowsBottom.setBackColor(Color.WHITE);
-        add(buttonRowsBottom, LEFT, BOTTOM, FILL, 70);
+        try {
 
-        cancelOrderButton.setBackColor(Color.getRGB(244, 67, 54));
-        cancelOrderButton.setForeColor(Color.WHITE);
-        buttonRows.add(cancelOrderButton, LEFT + 10, TOP + 8, (buttonRows.getWidth() / 2) - 15, 45);
+            cancelOrderButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
+            cancelOrderButton.setBackColor(Color.getRGB(156, 39, 176));
+            cancelOrderButton.setForeColor(Color.WHITE);
+            add(cancelOrderButton, RIGHT - 250, BOTTOM - 10, 60, 60);
 
-        closeOrderButton.setBackColor(Color.getRGB(46, 204, 113));
-        closeOrderButton.setForeColor(Color.WHITE);
-        buttonRows.add(closeOrderButton, AFTER + 10, SAME, (buttonRows.getWidth() / 2) - 15, 45);
+            infoButton = new Button(new Image("products.png").getScaledInstance(20, 20));
+            infoButton.setBackColor(Color.getRGB(46, 204, 113));
+            infoButton.setForeColor(Color.WHITE);
+            infoButton.setFont(infoButton.getFont().adjustedBy(10));
+            add(infoButton, RIGHT - 190, BOTTOM - 10, 60, 60);
+            
+            closeOrderButton = new Button(new Image("close.png").getScaledInstance(20, 20));
+            closeOrderButton.setBackColor(Color.getRGB(46, 204, 113));
+            closeOrderButton.setForeColor(Color.WHITE);
+            closeOrderButton.setFont(closeOrderButton.getFont().adjustedBy(10));
+            add(closeOrderButton, RIGHT - 130, BOTTOM - 10, 60, 60);
 
-        infoButton.setBackColor(Color.getRGB(156, 39, 176));
-        infoButton.setForeColor(Color.WHITE);
-        buttonRowsBottom.add(infoButton, AFTER + 10, SAME, (buttonRows.getWidth() / 2) - 15, 45);
+            addButton = new Button("+");
+            addButton.setBackColor(Color.getRGB(46, 204, 113));
+            addButton.setForeColor(Color.WHITE);
+            addButton.setFont(addButton.getFont().adjustedBy(10));
+            add(addButton, RIGHT - 70, BOTTOM - 10, 60, 60);
 
-        backButton.setBackColor(Color.getRGB(96, 125, 139));
-        backButton.setForeColor(Color.WHITE);
-        buttonRowsBottom.add(backButton, AFTER + 10, SAME, (buttonRows.getWidth() / 2) - 15, 45);
-
-        Button addButton = new Button("+");
-        addButton.setBackColor(Color.getRGB(46, 204, 113));
-        addButton.setForeColor(Color.WHITE);
-        addButton.setFont(addButton.getFont().adjustedBy(10));
-        add(addButton, RIGHT - 20, BOTTOM - 120, 60, 60);
+            backButton = new Button(new Image("home.png").getScaledInstance(20, 20));
+            backButton.setBackColor(Color.getRGB(244, 67, 54));
+            backButton.setForeColor(Color.WHITE);
+            add(backButton, RIGHT - 10, BOTTOM - 10, 60, 60);
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
         backButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new HomeView(user))

@@ -12,13 +12,13 @@ import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.gfx.Color;
+import totalcross.ui.image.Image;
 
 public class CustomerUserInfoView extends Container {
     private Label mainLabel = new Label("Clientes do Usuário");
     private ListContainer list;
-    private Container bottomBar = new Container();
-    private Button backButton = new Button("Voltar");
-    private Button cancelCustomerButton = new Button("Retirar Cliente");
+    private Button backButton;
+    private Button cancelCustomerButton;
 
     private int userId;
     private CustomerController customerController = new CustomerController();
@@ -43,16 +43,19 @@ public class CustomerUserInfoView extends Container {
         add(list, LEFT + 20, AFTER + 15, FILL - 40, FILL - 130);
         loadCustomers();
 
-        add(bottomBar, LEFT, BOTTOM, FILL, 70);
-        bottomBar.setBackColor(Color.getRGB(255, 255, 255));
-
-        cancelCustomerButton.setBackColor(Color.getRGB(39, 174, 96));
-        cancelCustomerButton.setForeColor(Color.WHITE);
-        bottomBar.add(cancelCustomerButton, LEFT + 10, CENTER, bottomBar.getWidth() / 2 - 15, 45);
-
-        backButton.setBackColor(Color.getRGB(231, 76, 60));
-        backButton.setForeColor(Color.WHITE);
-        bottomBar.add(backButton, RIGHT - 10, CENTER, bottomBar.getWidth() / 2 - 15, 45);
+        try {
+            cancelCustomerButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
+            cancelCustomerButton.setBackColor(Color.getRGB(156, 39, 176));
+            cancelCustomerButton.setForeColor(Color.WHITE);
+            add(cancelCustomerButton, RIGHT - 70, BOTTOM - 10, 60, 60);
+    
+            backButton = new Button(new Image("home.png").getScaledInstance(20, 20));
+            backButton.setBackColor(Color.getRGB(244, 67, 54));
+            backButton.setForeColor(Color.WHITE);
+            add(backButton, RIGHT - 10, BOTTOM - 10, 60, 60);
+        } catch(Exception e) {
+            System.out.println(e);
+        }
 
         backButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new ListUserView(user))

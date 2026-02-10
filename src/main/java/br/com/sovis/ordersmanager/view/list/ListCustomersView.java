@@ -9,19 +9,18 @@ import br.com.sovis.ordersmanager.view.forms.CustomerView;
 import br.com.sovis.ordersmanager.view.items.CustomerItem;
 import totalcross.ui.*;
 import totalcross.ui.gfx.Color;
+import totalcross.ui.image.Image;
 
 public class ListCustomersView extends Container {
 
     private Label mainLabel = new Label("Clientes");
 
-    private Container buttonRows = new Container();
-
     private ListContainer list;
 
-    private Button backButton = new Button("Voltar");
-    private Button removeCustomerButton = new Button("Remover");
+    private Button backButton;
+    private Button removeCustomerButton;
     private Button addCustomerButton = new Button("+");
-    private Button assButton = new Button("=");
+    private Button assButton;
 
     private CustomerController customerController = new CustomerController();
     private Customer[] customers;
@@ -41,38 +40,35 @@ public class ListCustomersView extends Container {
         add(mainLabel, CENTER, TOP + 20);
 
         list = new ListContainer();
-        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 130);
+        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 80);
         loadCustomers();
 
-        buttonRows.setBackColor(Color.WHITE);
-        add(buttonRows, LEFT, BOTTOM, FILL, 60);
+        try {
 
-        if (user.getAdmin() == 1) {
-            removeCustomerButton.setBackColor(Color.getRGB(156, 39, 176));
-            removeCustomerButton.setForeColor(Color.WHITE);
-            buttonRows.add(
-                removeCustomerButton,
-                LEFT + 10,
-                CENTER,
-                (buttonRows.getWidth() / 2) - 15,
-                45
-            );
-        }
+            if (user.getAdmin() == 1) {
+                removeCustomerButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
+                removeCustomerButton.setBackColor(Color.getRGB(156, 39, 176));
+                removeCustomerButton.setForeColor(Color.WHITE);
+                add(removeCustomerButton, RIGHT - 190, BOTTOM - 10, 60, 60);
 
-        backButton.setBackColor(Color.getRGB(244, 67, 54));
-        backButton.setForeColor(Color.WHITE);
-        buttonRows.add(backButton, AFTER + 10, SAME, (buttonRows.getWidth() / 2) - 15, 45);
+                assButton = new Button(new Image("customers.png").getScaledInstance(20, 20));
+                assButton.setBackColor(Color.getRGB(46, 204, 113));
+                assButton.setForeColor(Color.WHITE);
+                assButton.setFont(assButton.getFont().adjustedBy(10));
+                add(assButton, RIGHT - 130, BOTTOM - 10, 60, 60);
+    
+                addCustomerButton.setBackColor(Color.getRGB(46, 204, 113));
+                addCustomerButton.setForeColor(Color.WHITE);
+                addCustomerButton.setFont(addCustomerButton.getFont().adjustedBy(10));
+                add(addCustomerButton, RIGHT - 70, BOTTOM - 10, 60, 60);
+            }
 
-        if(user.getAdmin() == 1) {
-            addCustomerButton.setBackColor(Color.getRGB(46, 204, 113));
-            addCustomerButton.setForeColor(Color.WHITE);
-            addCustomerButton.setFont(addCustomerButton.getFont().adjustedBy(10));
-            add(addCustomerButton, RIGHT - 20, BOTTOM - 60, 60, 60);
-
-            assButton.setBackColor(Color.getRGB(46, 204, 113));
-            assButton.setForeColor(Color.WHITE);
-            assButton.setFont(assButton.getFont().adjustedBy(10));
-            add(assButton, RIGHT - 80, BOTTOM - 60, 60, 60);
+            backButton = new Button(new Image("home.png").getScaledInstance(20, 20));
+            backButton.setBackColor(Color.getRGB(244, 67, 54));
+            backButton.setForeColor(Color.WHITE);
+            add(backButton, RIGHT - 10, BOTTOM - 10, 60, 60);
+        } catch(Exception e) {
+            System.out.println(e);
         }
 
         backButton.addPressListener(e ->

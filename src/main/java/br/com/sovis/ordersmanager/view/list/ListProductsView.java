@@ -14,15 +14,17 @@ import totalcross.ui.ListContainer;
 import totalcross.ui.MainWindow;
 import totalcross.ui.Toast;
 import totalcross.ui.gfx.Color;
+import totalcross.ui.image.Image;
 
 public class ListProductsView extends Container {
 
     private Label mainLabel = new Label("Produtos");
     private ListContainer list;
-    private Container buttonRows = new Container();
 
-    private Button backButton = new Button("Voltar");
-    private Button removeProductButton = new Button("Remover");
+    private Button assButton;
+    private Button addProductButton = new Button("+");
+    private Button backButton;
+    private Button removeProductButton;
 
     private ProductController productController = new ProductController();
     private Product[] products;
@@ -42,68 +44,54 @@ public class ListProductsView extends Container {
         add(mainLabel, CENTER, TOP + 20);
 
         list = new ListContainer();
-        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 130);
+        add(list, LEFT + 20, AFTER + 10, FILL - 40, FILL - 80);
         loadProducts();
-
-        buttonRows.setBackColor(Color.WHITE);
-        add(buttonRows, LEFT, BOTTOM, FILL, 60);
-
-        if(user.getAdmin() == 1){
-            removeProductButton.setBackColor(Color.getRGB(156, 39, 176));
-            removeProductButton.setForeColor(Color.WHITE);
-            buttonRows.add(
-                removeProductButton,
-                LEFT + 10,
-                CENTER,
-                (buttonRows.getWidth() / 2) - 15,
-                45
-            );
+        
+        try {
+            if (user.getAdmin() == 1) {
+                removeProductButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
+                removeProductButton.setBackColor(Color.getRGB(156, 39, 176));
+                removeProductButton.setForeColor(Color.WHITE);
+                add(removeProductButton, RIGHT - 190, BOTTOM - 10, 60, 60);
+                
+                assButton = new Button(new Image("products.png").getScaledInstance(20, 20));
+                assButton.setBackColor(Color.getRGB(46, 204, 113));
+                assButton.setForeColor(Color.WHITE);
+                assButton.setFont(assButton.getFont().adjustedBy(10));
+                add(assButton, RIGHT - 130, BOTTOM - 10, 60, 60);
+    
+                addProductButton.setBackColor(Color.getRGB(46, 204, 113));
+                addProductButton.setForeColor(Color.WHITE);
+                addProductButton.setFont(addProductButton.getFont().adjustedBy(10));
+                add(addProductButton, RIGHT - 70, BOTTOM - 10, 60, 60);
+            }
+            
+            backButton = new Button(new Image("home.png").getScaledInstance(20, 20));
+            backButton.setBackColor(Color.getRGB(244, 67, 54));
+            backButton.setForeColor(Color.WHITE);
+            add(backButton, RIGHT - 10, BOTTOM - 10, 60, 60);
+        } catch(Exception e) {
+            System.out.println(e);
         }
-
-
-        backButton.setBackColor(Color.getRGB(244, 67, 54));
-        backButton.setForeColor(Color.WHITE);
-        buttonRows.add(
-            backButton,
-            AFTER + 10,
-            SAME,
-            (buttonRows.getWidth() / 2) - 15,
-            45
-        );
-
-        if(user.getAdmin() == 1) {
-            Button addButton = new Button("+");
-            addButton.setBackColor(Color.getRGB(46, 204, 113));
-            addButton.setForeColor(Color.WHITE);
-            addButton.setFont(addButton.getFont().adjustedBy(10));
-            add(addButton, RIGHT - 20, BOTTOM - 60, 60, 60);
-    
-            Button assButton = new Button("=");
-            assButton.setBackColor(Color.getRGB(46, 204, 113));
-            assButton.setForeColor(Color.WHITE);
-            assButton.setFont(assButton.getFont().adjustedBy(10));
-            add(assButton, RIGHT - 80, BOTTOM - 60, 60, 60);
-    
-            addButton.addPressListener(e ->
-                MainWindow.getMainWindow().swap(new ProductView(user))
-            );
-    
-            assButton.addPressListener(e ->
-                MainWindow.getMainWindow().swap(new ProductToUserView(user))
-            );
-        }
-
-
+        
         backButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new HomeView(user))
         );
-
+        
         removeProductButton.addPressListener(e ->
             removeProduct()
         );
         
-    }
+        addProductButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new ProductView(user))
+        );
+    
+        assButton.addPressListener(e ->
+            MainWindow.getMainWindow().swap(new ProductToUserView(user))
+        );
 
+    }
+    
     private void loadProducts() {
         try {
             if(user.getAdmin() == 1) {
