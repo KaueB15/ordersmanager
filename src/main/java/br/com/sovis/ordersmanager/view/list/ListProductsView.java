@@ -51,7 +51,7 @@ public class ListProductsView extends Container {
         try {
             removeProductButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
             assButton = new Button(new Image("products.png").getScaledInstance(20, 20));
-            editButton = new Button("-");
+            editButton = new Button(new Image("edit.png").getScaledInstance(20, 20));
             
             if (user.getAdmin() == 1) {
                 removeProductButton.setBackColor(Color.getRGB(156, 39, 176));
@@ -105,7 +105,7 @@ public class ListProductsView extends Container {
                 Toast.show("Selecione um produto", 2000);
                 return;
             }
-            
+
             MainWindow.getMainWindow().swap(new ProductView(user, products[selectedIndex]));
         });
 
