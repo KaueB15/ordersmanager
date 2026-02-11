@@ -30,7 +30,7 @@ public class OrderProductDAO {
 
         ps.setInt(1, item.getidOrder());
         ps.setInt(2, item.getidProduct());
-        ps.setDouble(3, item.getValue());
+        ps.setDouble(3, item.getValue() * item.getQuantity());
         ps.setInt(4, item.getQuantity());
 
         ps.executeUpdate();
@@ -90,7 +90,7 @@ public class OrderProductDAO {
 
     public void addProductToOrder(int orderId, int productId, double price, int quantity) throws Exception {
 
-        PreparedStatement check = connection.prepareStatement(
+        PreparedStatement checkProduct = connection.prepareStatement(
             "SELECT quantity, price FROM product_order WHERE id_order = ? AND id_product = ?"
         );
 
@@ -100,10 +100,10 @@ public class OrderProductDAO {
 
         checkOrderValue.setInt(1, orderId);
 
-        check.setInt(1, orderId);
-        check.setInt(2, productId);
+        checkProduct.setInt(1, orderId);
+        checkProduct.setInt(2, productId);
 
-        ResultSet rs = check.executeQuery();
+        ResultSet rs = checkProduct.executeQuery();
         ResultSet rsOrder = checkOrderValue.executeQuery();
 
         if (rs.next()) {
@@ -161,8 +161,63 @@ public class OrderProductDAO {
         }
 
         rs.close();
-        check.close();
+        checkProduct.close();
     }
+
+    public void removeOneProductQuantity(int productId, int orderId) throws Exception {
+        PreparedStatement checkProduct = connection.prepareStatement(
+            "SELECT quantity, price FROM product_order WHERE id_order = ? AND id_product = ?"
+        );
+
+        PreparedStatement checkOrderValue = connection.prepareStatement(
+            "SELECT total_price FROM orders WHERE id = ?"
+        );
+
+        checkProduct.setInt(1, orderId);
+        checkProduct.setInt(2, productId);
+
+        checkOrderValue.setInt(1, orderId);
+
+        ResultSet rs = checkProduct.executeQuery();
+        ResultSet rsOrder = checkOrderValue.executeQuery();
+
+        int currentQuantity = rs.getInt("quantity");
+        double currentTotal = rs.getDouble("price");
+
+        double currentTotalOrderPrice = rsOrder.getDouble("total_price");
+
+        double removeFromTotal = currentTotal / currentQuantity;
+        int newQuantity = currentQuantity - 1;
+
+        if(newQuantity == 0) {
+            deleteProductFromOrder(orderId, productId);
+        } else {
+            PreparedStatement updateProductOrder = connection.prepareStatement(
+                "UPDATE product_order SET quantity = ?, price = ? WHERE id_order = ? AND id_product = ?"
+            );
+    
+            updateProductOrder.setInt(1, newQuantity);
+            updateProductOrder.setDouble(2, currentTotal - removeFromTotal);
+            updateProductOrder.setInt(3, orderId);
+            updateProductOrder.setInt(4, productId);
+    
+            updateProductOrder.executeUpdate();
+            updateProductOrder.close();
+        }
+
+        PreparedStatement updateOrder = connection.prepareStatement(
+            "UPDATE orders SET total_price = ? WHERE id = ?"
+        );
+        
+        updateOrder.setDouble(1, currentTotalOrderPrice - removeFromTotal);
+        updateOrder.setInt(2, orderId);
+
+        updateOrder.executeUpdate();
+        updateOrder.close();
+
+        rs.close();
+        checkProduct.close();
+    } 
 
 }
 

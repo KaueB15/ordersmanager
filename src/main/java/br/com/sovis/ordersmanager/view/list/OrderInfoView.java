@@ -1,6 +1,7 @@
 package br.com.sovis.ordersmanager.view.list;
 
 import br.com.sovis.ordersmanager.controller.OrderController;
+import br.com.sovis.ordersmanager.controller.ProductController;
 import br.com.sovis.ordersmanager.model.ProductItem;
 import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.forms.OrderView;
@@ -24,8 +25,10 @@ public class OrderInfoView extends Container {
     private Button backButton;
     private Button cancelProductButton;
     private Button addProductButton = new Button("+");
+    private Button removeOneProductButton = new Button("-");
 
     private OrderController orderController = new OrderController();
+    private ProductController productController = new ProductController();
     private ProductItem[] productItems;
     private User user;
 
@@ -52,12 +55,17 @@ public class OrderInfoView extends Container {
             cancelProductButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
             cancelProductButton.setBackColor(Color.getRGB(156, 39, 176));
             cancelProductButton.setForeColor(Color.WHITE);
-            add(cancelProductButton, RIGHT - 130, BOTTOM - 10, 60, 60);
+            add(cancelProductButton, RIGHT - 190, BOTTOM - 10, 60, 60);
 
             addProductButton.setBackColor(Color.getRGB(39, 174, 96));
             addProductButton.setForeColor(Color.WHITE);
             addProductButton.setFont(addProductButton.getFont().adjustedBy(10));
-            add(addProductButton, RIGHT - 70, BOTTOM - 10, 60, 60);
+            add(addProductButton, RIGHT - 130, BOTTOM - 10, 60, 60);
+            
+            removeOneProductButton.setBackColor(Color.getRGB(39, 174, 96));
+            removeOneProductButton.setForeColor(Color.WHITE);
+            removeOneProductButton.setFont(removeOneProductButton.getFont().adjustedBy(10));
+            add(removeOneProductButton, RIGHT - 70, BOTTOM - 10, 60, 60);
     
             backButton = new Button(new Image("home.png").getScaledInstance(20, 20));
             backButton.setBackColor(Color.getRGB(244, 67, 54));
@@ -77,13 +85,16 @@ public class OrderInfoView extends Container {
         );
 
         addProductButton.addPressListener(e -> {
-
             if (status.equals("FECHADO")) {
                 Toast.show("Pedido já fechado!", 2000);
                 return;
             }
 
             MainWindow.getMainWindow().swap(new OrderView(orderId, user));
+        });
+
+        removeOneProductButton.addPressListener(e -> {
+            removeOneProduct();
         });
     }
 
@@ -122,6 +133,29 @@ public class OrderInfoView extends Container {
             MainWindow.getMainWindow().swap(new OrderInfoView(orderId, status, user));
         } catch (Exception e) {
             Toast.show("Falha ao remover produto", 2000);
+        }
+    }
+
+    public void removeOneProduct() {
+
+        int selected = list.getSelectedIndex();
+
+        if (selected == -1) {
+            Toast.show("Selecione um produto", 2000);
+            return;
+        }
+
+        if (status.equals("FECHADO")) {
+            Toast.show("Pedido já fechado!", 2000);
+            return;
+        }
+
+        try {
+            int productId = productItems[selected].getItemId();
+            productController.removeOneProductQuantity(productId, orderId);
+            MainWindow.getMainWindow().swap(new OrderInfoView(orderId, status, user));
+        } catch (Exception e) {
+            Toast.show("Falha ao remover um produto", 2000);
         }
     }
 }

@@ -44,14 +44,15 @@ public class ListCustomersView extends Container {
         loadCustomers();
 
         try {
+            
+            removeCustomerButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
+            assButton = new Button(new Image("customers.png").getScaledInstance(20, 20));
 
             if (user.getAdmin() == 1) {
-                removeCustomerButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
                 removeCustomerButton.setBackColor(Color.getRGB(156, 39, 176));
                 removeCustomerButton.setForeColor(Color.WHITE);
                 add(removeCustomerButton, RIGHT - 190, BOTTOM - 10, 60, 60);
 
-                assButton = new Button(new Image("customers.png").getScaledInstance(20, 20));
                 assButton.setBackColor(Color.getRGB(46, 204, 113));
                 assButton.setForeColor(Color.WHITE);
                 assButton.setFont(assButton.getFont().adjustedBy(10));

@@ -48,13 +48,14 @@ public class ListProductsView extends Container {
         loadProducts();
         
         try {
+            removeProductButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
+            assButton = new Button(new Image("products.png").getScaledInstance(20, 20));
+            
             if (user.getAdmin() == 1) {
-                removeProductButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
                 removeProductButton.setBackColor(Color.getRGB(156, 39, 176));
                 removeProductButton.setForeColor(Color.WHITE);
                 add(removeProductButton, RIGHT - 190, BOTTOM - 10, 60, 60);
                 
-                assButton = new Button(new Image("products.png").getScaledInstance(20, 20));
                 assButton.setBackColor(Color.getRGB(46, 204, 113));
                 assButton.setForeColor(Color.WHITE);
                 assButton.setFont(assButton.getFont().adjustedBy(10));
