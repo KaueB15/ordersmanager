@@ -23,6 +23,7 @@ public class ListProductsView extends Container {
 
     private Button assButton;
     private Button addProductButton = new Button("+");
+    private Button editButton;
     private Button backButton;
     private Button removeProductButton;
 
@@ -50,16 +51,22 @@ public class ListProductsView extends Container {
         try {
             removeProductButton = new Button(new Image("delete.png").getScaledInstance(20, 20));
             assButton = new Button(new Image("products.png").getScaledInstance(20, 20));
+            editButton = new Button("-");
             
             if (user.getAdmin() == 1) {
                 removeProductButton.setBackColor(Color.getRGB(156, 39, 176));
                 removeProductButton.setForeColor(Color.WHITE);
-                add(removeProductButton, RIGHT - 190, BOTTOM - 10, 60, 60);
+                add(removeProductButton, RIGHT - 250, BOTTOM - 10, 60, 60);
                 
                 assButton.setBackColor(Color.getRGB(46, 204, 113));
                 assButton.setForeColor(Color.WHITE);
                 assButton.setFont(assButton.getFont().adjustedBy(10));
-                add(assButton, RIGHT - 130, BOTTOM - 10, 60, 60);
+                add(assButton, RIGHT - 190, BOTTOM - 10, 60, 60);
+
+                editButton.setBackColor(Color.getRGB(46, 204, 113));
+                editButton.setForeColor(Color.WHITE);
+                editButton.setFont(editButton.getFont().adjustedBy(10));
+                add(editButton, RIGHT - 130, BOTTOM - 10, 60, 60);
     
                 addProductButton.setBackColor(Color.getRGB(46, 204, 113));
                 addProductButton.setForeColor(Color.WHITE);
@@ -90,6 +97,17 @@ public class ListProductsView extends Container {
         assButton.addPressListener(e ->
             MainWindow.getMainWindow().swap(new ProductToUserView(user))
         );
+
+        editButton.addPressListener(e -> {
+            int selectedIndex = list.getSelectedIndex();
+
+            if (selectedIndex == -1) {
+                Toast.show("Selecione um produto", 2000);
+                return;
+            }
+            
+            MainWindow.getMainWindow().swap(new ProductView(user, products[selectedIndex]));
+        });
 
     }
     

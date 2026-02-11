@@ -92,4 +92,19 @@ public class ProductDAO {
         return used;
     }
 
+    public void update(Product product) throws Exception {
+        PreparedStatement updateProduct = connection.prepareStatement(
+            "UPDATE product SET name = ?, price = ?, description = ? WHERE id = ?"
+        );
+
+        updateProduct.setString(1, product.getName());
+        updateProduct.setDouble(2, product.getPrice());
+        updateProduct.setString(3, product.getDescription());
+        updateProduct.setInt(4, product.getId());
+
+        updateProduct.executeUpdate();
+        updateProduct.close();
+
+    }
+
 }

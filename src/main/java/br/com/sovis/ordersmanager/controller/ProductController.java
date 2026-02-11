@@ -17,15 +17,8 @@ public class ProductController {
         this.orderProductDAO = new OrderProductDAO();
     }
 
-    public void createProduct(String name, String description, double price) throws Exception {
-
-        Product product = new Product();
-        product.setName(name);
-        product.setDescription(description);
-        product.setPrice(price);
-        
+    public void createProduct(Product product) throws Exception {
         productDAO.insert(product);
-
     }
 
     public Product[] findAll() throws Exception {
@@ -48,4 +41,8 @@ public class ProductController {
         orderProductDAO.removeOneProductQuantity(productId, orderId);
     }
 
+    public void updateProduct(Product product) throws Exception {
+        productDAO.update(product);
+    }
+ 
 }

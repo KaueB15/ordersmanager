@@ -1,6 +1,7 @@
 package br.com.sovis.ordersmanager.view.forms;
 
 import br.com.sovis.ordersmanager.controller.ProductController;
+import br.com.sovis.ordersmanager.model.Product;
 import br.com.sovis.ordersmanager.model.User;
 import br.com.sovis.ordersmanager.view.list.ListProductsView;
 import totalcross.ui.Button;
@@ -26,6 +27,7 @@ public class ProductView extends Container {
     private Container footer = new Container();
     private ProductController productController = new ProductController();
     private User user;
+    private Product product;
 
     int boxWidth = 300;
     int boxHeight = 50;
@@ -33,6 +35,11 @@ public class ProductView extends Container {
 
     public ProductView(User user) {
         this.user = user;
+    }
+
+    public ProductView(User user, Product product) {
+        this.user = user;
+        this.product = product;
     }
 
     @Override
@@ -47,6 +54,12 @@ public class ProductView extends Container {
         addField("Nome", nameField, AFTER + 40);
         addField("Descrição", descriptionField, AFTER + 20);
         addField("Preço", priceField, AFTER + 20);
+        
+        if(product != null) {
+            nameField.setText(product.getName());
+            descriptionField.setText(product.getDescription());
+            priceField.setText(String.valueOf(product.getPrice()));
+        }
 
         priceField.setValidChars("0123456789");
 
@@ -81,9 +94,7 @@ public class ProductView extends Container {
 
         Container inner = new Container();
         inner.setBackColor(Color.WHITE);
-        box.add(inner, LEFT + padding, TOP + padding,
-                boxWidth - padding * 2, boxHeight - padding * 2);
-
+        box.add(inner, LEFT + padding, TOP + padding, boxWidth - padding * 2, boxHeight - padding * 2);
         field.setBackColor(Color.WHITE);
         field.setForeColor(Color.getRGB(44, 62, 80));
         field.transparentBackground = false;
@@ -97,15 +108,21 @@ public class ProductView extends Container {
         }
 
         try {
-            productController.createProduct(
-                nameField.getText(),
-                descriptionField.getText(),
-                Double.parseDouble(priceField.getText())
-            );
-
-            Toast.show("Produto cadastrado com sucesso", 2000);
-            MainWindow.getMainWindow().swap(new ListProductsView(user));
-
+            Product newProduct = new Product();
+            newProduct.setName(nameField.getText());
+            newProduct.setDescription(descriptionField.getText());
+            newProduct.setPrice(Double.parseDouble(priceField.getText()));
+            
+            if(product != null) {
+                newProduct.setId(product.getId());
+                productController.updateProduct(newProduct);
+                Toast.show("Produto atualizado com sucesso", 2000);
+                MainWindow.getMainWindow().swap(new ListProductsView(user));
+            } else {
+                productController.createProduct(newProduct);
+                Toast.show("Produto cadastrado com sucesso", 2000);
+                MainWindow.getMainWindow().swap(new ListProductsView(user));
+            }
         } catch (Exception e) {
             Toast.show("Erro ao cadastrar produto", 2000);
         }

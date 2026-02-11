@@ -15,7 +15,7 @@ import totalcross.ui.gfx.Color;
 public class UsersView extends Container {
 
     private Label mainLabel = new Label("Criar Usuário");
-    private Label emailLabel = new Label("E-mail");
+    private Label emailLabel = new Label("Nome de Usuário");
     private Label passwordLabel = new Label("Senha");
 
     private Container emailBox = new Container();

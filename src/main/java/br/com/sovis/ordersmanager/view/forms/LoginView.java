@@ -15,7 +15,7 @@ import totalcross.ui.gfx.Color;
 public class LoginView extends Container {
 
     private Label mainLabel = new Label("Login");
-    private Label emailLabel = new Label("E-mail");
+    private Label emailLabel = new Label("Nome de Usuário");
     private Label passwordLabel = new Label("Senha");
 
     private Container emailBox = new Container();
