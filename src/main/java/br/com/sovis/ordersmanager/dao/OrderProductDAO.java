@@ -78,11 +78,41 @@ public class OrderProductDAO {
 
     public void deleteProductFromOrder(int orderId, int productId) throws Exception {
 
+        PreparedStatement psOrder = connection.prepareStatement("SELECT price FROM product_order WHERE id_order = ? AND id_product = ?");
+        psOrder.setInt(1, orderId);
+        psOrder.setInt(2, productId);
+        ResultSet rs = psOrder.executeQuery();
+
+        PreparedStatement checkOrderValue = connection.prepareStatement(
+            "SELECT total_price FROM orders WHERE id = ?"
+        );
+
+        checkOrderValue.setInt(1, orderId);
+
+        ResultSet rsOrder = checkOrderValue.executeQuery();
+
         PreparedStatement ps = connection.prepareStatement("DELETE FROM product_order WHERE id_order = ? AND id_product = ?");
 
         ps.setInt(1, orderId);
         ps.setInt(2, productId);
 
+        double productPrice = rs.getDouble("price");
+        double currentTotalOrderPrice = rsOrder.getDouble("total_price");
+
+        PreparedStatement updateOrder = connection.prepareStatement(
+            "UPDATE orders SET total_price = ? WHERE id = ?"
+        );
+        
+        updateOrder.setDouble(1, currentTotalOrderPrice - productPrice);
+        updateOrder.setInt(2, orderId);
+
+        updateOrder.executeUpdate();
+
+        updateOrder.close();
+        rsOrder.close();
+        rs.close();
+        psOrder.close();
+        checkOrderValue.close();
         ps.executeUpdate();
         ps.close();
 
